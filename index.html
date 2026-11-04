@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Torre de Operações - Supervisão & Gestão Setorial</title>
+  <title>Torre de Operações - Supervisão & Gestão</title>
   <style>
     :root {
       --bg-main: #070d18;
@@ -245,7 +245,6 @@
     .badge-atrasado { background: var(--accent-red); color: #fff; }
     .badge-ontime { background: #065f46; color: #34d399; }
 
-    /* PRIORIDADES */
     .badge-prioridade-critica { background: #ef4444; color: #fff; }
     .badge-prioridade-alta { background: #ea580c; color: #fff; }
     .badge-prioridade-media { background: #ca8a04; color: #fff; }
@@ -267,122 +266,7 @@
     }
     .card-meta strong { color: #cbd5e1; }
 
-    .meta-dono {
-      color: #38bdf8 !important;
-    }
-
+    .meta-dono { color: #38bdf8 !important; }
     .meta-parado {
       color: #f59e0b !important;
-      background: rgba(245, 158, 11, 0.1);
-      padding: 2px 4px;
-      border-radius: 3px;
-      display: inline-block;
-      margin-top: 2px;
-    }
-
-    .card-actions {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-top: 1px solid #1e293b;
-      padding-top: 8px;
-      margin-top: 6px;
-      gap: 6px;
-    }
-
-    .card-btn-group {
-      display: flex;
-      gap: 6px;
-    }
-
-    .card-del {
-      background: transparent;
-      color: #ef4444;
-      font-size: 0.75rem;
-      padding: 2px 6px;
-    }
-
-    /* CALENDÁRIO */
-    .calendar-view {
-      display: none;
-      background: #090f1d;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 20px;
-    }
-
-    .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 6px;
-      margin-top: 14px;
-    }
-
-    .cal-header-day {
-      text-align: center;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      padding: 8px 0;
-    }
-
-    .cal-day {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      min-height: 90px;
-      padding: 6px;
-      border-radius: 4px;
-      font-size: 0.75rem;
-    }
-
-    .cal-day-num { font-weight: 700; color: #64748b; margin-bottom: 4px; }
-    .cal-day-num.today { color: var(--accent-amber); }
-
-    .cal-task-item {
-      background: #1e293b;
-      border-left: 2px solid var(--accent-cyan);
-      padding: 2px 4px;
-      margin-bottom: 3px;
-      border-radius: 2px;
-      font-size: 0.7rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    /* MODAIS */
-    .modal-backdrop {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.75);
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-    }
-
-    .modal-box {
-      background: #0f172a;
-      border: 1px solid var(--border-accent);
-      padding: 22px;
-      border-radius: 8px;
-      width: 90%;
-      max-width: 520px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
-      max-height: 90vh;
-      overflow-y: auto;
-    }
-
-    .modal-box h3 { font-size: 1.05rem; margin-bottom: 14px; color: var(--accent-cyan); }
-    .form-group { margin-bottom: 12px; }
-    .form-group label { display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; font-weight: 600; }
-    .form-group input, .form-group select, .form-group textarea {
-      width: 100%; background: #070d18; border: 1px solid var(--border); color: var(--text); padding: 8px 10px; border-radius: 4px; font-size: 0.85rem; outline: none;
-    }
-
-    .alarm-banner {
-      display: none;
-      position: fixed;
-      bottom: 24px; right: 24px;
-      background: #7f1d1d;
-      border: 1px
+      background: rgba(245, 158, 1
