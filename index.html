@@ -45,6 +45,9 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
     }
 
     .brand {
@@ -157,7 +160,7 @@
     }
     .filter-bar input:focus, .filter-bar select:focus { border-color: var(--accent-cyan); }
 
-    /* KANBAN */
+    /* KANBAN COM CABEÇALHOS TRAVADOS E ROLAGEM */
     .kanban-board {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -169,13 +172,17 @@
       background: #090f1d;
       border: 1px solid var(--border);
       border-radius: 8px;
-      min-height: 520px;
+      height: calc(100vh - 280px);
+      min-height: 480px;
       display: flex;
       flex-direction: column;
+      overflow: hidden;
     }
 
+    /* TOPO TRAVADO */
     .col-header {
       padding: 12px 14px;
+      background: #0d1527;
       border-bottom: 1px solid var(--border);
       font-size: 0.85rem;
       font-weight: 700;
@@ -183,6 +190,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
 
     .col-header .counter {
@@ -194,12 +204,24 @@
       font-family: monospace;
     }
 
+    /* ÁREA DE CARDS ROLÁVEL COM BARRA FINA */
     .col-tasks {
       padding: 12px;
       flex: 1;
       display: flex;
       flex-direction: column;
       gap: 10px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #334155 transparent;
+    }
+
+    .col-tasks::-webkit-scrollbar {
+      width: 6px;
+    }
+    .col-tasks::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
     }
 
     .card {
@@ -935,7 +957,6 @@
     function openPasteModal() { document.getElementById('modal-paste').style.display = 'flex'; }
     function closePasteModal() { document.getElementById('modal-paste').style.display = 'none'; }
 
-    // Leitor de arquivo em base64
     document.getElementById('task-file').addEventListener('change', function(e) {
       var file = e.target.files[0];
       if (file) {
@@ -1166,7 +1187,7 @@
           renderKanban();
           alert('Dados carregados com sucesso!');
         } catch (err) {
-          alert('Arquivo inválido.');
+          alert('Ficheiro inválido.');
         }
       };
       reader.readAsText(file);
