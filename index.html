@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel do Supervisor Operacional</title>
+  <style>
+    :root {
+      --bg-main: #0b111e;
+      --bg-card: #151f32;
+      --bg-card-hover: #1c2a44;
+      --border: #233554;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --accent-blue: #0284c7;
+      --accent-amber: #f59e0b;
+      --accent-green: #10b981;
+      --accent-red: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background-color: #080d18;
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .brand {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #38bdf8;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand span {
+      background: #1e293b;
+      color: var(--accent-amber);
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid #334155;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: opacity 0.2s;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .btn-primary {
+      background-color: var(--accent-blue);
+      color: #fff;
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    .btn-outline.active {
+      background-color: #1e293b;
+      color: #fff;
+      border-color: #38bdf8;
+    }
+
+    .btn-action {
+      background-color: #1e293b;
+      border: 1px solid var(--border);
+      color: #94a3b8;
+      font-size: 0.75rem;
+      padding: 5px 8px;
+    }
+
+    main {
+      padding: 20px 24px;
+      flex: 1;
+    }
+
+    /* BARRA DE FILTRO */
+    .filter-bar {
+      margin-bottom: 20px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .filter-bar input, .filter-bar select {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      outline: none;
+    }
+
+    .filter-bar input:focus, .filter-bar select:focus {
+      border-color: var(--accent-blue);
+    }
+
+    /* KANBAN */
+    .kanban-board {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      align-items: start;
+    }
+
+    .kanban-col {
+      background: #0f172a;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      min-height: 480px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .col-header {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #cbd5e1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .col-header .counter {
+      background: #1e293b;
+      color: #94a3b8;
+      padding: 2px 7px;
+      border-radius: 10px;
+      font-size: 0.75rem;
+    }
+
+    .col-tasks {
+      padding: 12px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+      cursor: grab;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+
+    .card:hover {
+      background: var(--bg-card-hover);
+      border-color: #38bdf8;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      margin-bottom: 6px;
+    }
+
+    .badge {
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .badge-patio { background: #0369a1; color: #fff; }
+    .badge-transito { background: #d97706; color: #fff; }
+    .badge-fechamento { background: #7c3aed; color: #fff; }
+    .badge-critica { background: var(--accent-red); color: #fff; }
+
+    .card-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #f1f5f9;
+    }
+
+    .card-meta {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .card-meta strong {
+      color: #cbd5e1;
+    }
+
+    .card-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #1e293b;
+      padding-top: 8px;
+      margin-top: 6px;
+    }
+
+    .card-del {
+      background: transparent;
+      color: #ef4444;
+      padding: 2px 6px;
+      font-size: 0.75rem;
+    }
+
+    /* CALENDÁRIO */
+    .calendar-view {
+      display: none;
+      background: #0f172a;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      margin-top: 14px;
+    }
+
+    .cal-header-day {
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 8px 0;
+    }
+
+    .cal-day {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      min-height: 90px;
+      padding: 6px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+    }
+
+    .cal-day-num {
+      font-weight: 700;
+      color: #64748b;
+      margin-bottom: 4px;
+    }
+
+    .cal-day-num.today {
+      color: var(--accent-amber);
+    }
+
+    .cal-task-item {
+      background: #1e293b;
+      border-left: 2px solid var(--accent-blue);
+      padding: 2px 4px;
+      margin-bottom: 3px;
+      border-radius: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 0.7rem;
+    }
+
+    /* MODAL */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.65);
+      justify-content: center;
+      align-items: center;
+      z-index: 50;
+    }
+
+    .modal-box {
+      background: #0f172a;
+      border: 1px solid var(--border);
+      padding: 20px;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 440px;
+    }
+
+    .modal-box h3 {
+      font-size: 1rem;
+      margin-bottom: 14px;
+      color: #38bdf8;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      outline: none;
+    }
+
+    /* ALERTA TOAST */
+    .alarm-banner {
+      display: none;
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #7f1d1d;
+      border: 1px solid #ef4444;
+      color: #fff;
+      padding: 14px 18px;
+      border-radius: 6px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      TORRE DE OPERAÇÕES <span>SUPERVISÃO</span>
+    </div>
+    <div class="header-actions">
+      <button class="btn-outline active" id="btn-tab-kanban" onclick="switchView('kanban')">Kanban</button>
+      <button class="btn-outline" id="btn-tab-cal" onclick="switchView('calendar')">Calendário</button>
+      <button class="btn-action" onclick="exportData()">Exportar Backup</button>
+      <button class="btn-action" onclick="document.getElementById('import-file').click()">Importar</button>
+      <input type="file" id="import-file" style="display:none;" onchange="importData(event)">
+      <button class="btn-primary" onclick="openModal()">+ Nova Demanda</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="filter-bar">
+      <input type="text" id="filtro-busca" placeholder="Filtrar tarefa, placa ou motorista..." oninput="renderKanban()">
+      <select id="filtro-setor" onchange="renderKanban()">
+        <option value="">Todos os tipos</option>
+        <option value="Programação">Programação / Pátio</option>
+        <option value="Trânsito">Trânsito / Viagem</option>
+        <option value="Fechamento">Fechamento / Canhoto / CT-e</option>
+      </select>
+    </div>
+
+    <!-- TELA KANBAN -->
+    <div id="view-kanban" class="kanban-board">
+      <div class="kanban-col" ondragover="allowDrop(event)" ondrop="drop(event, 'patio')">
+        <div class="col-header">1. Programação & Pátio <span class="counter" id="count-patio">0</span></div>
+        <div class="col-tasks" id="col-patio"></div>
+      </div>
+      <div class="kanban-col" ondragover="allowDrop(event)" ondrop="drop(event, 'transito')">
+        <div class="col-header">2. Trânsito & Ocorrências <span class="counter" id="count-transito">0</span></div>
+        <div class="col-tasks" id="col-transito"></div>
+      </div>
+      <div class="kanban-col" ondragover="allowDrop(event)" ondrop="drop(event, 'fechamento')">
+        <div class="col-header">3. Fechamento & CT-e <span class="counter" id="count-fechamento">0</span></div>
+        <div class="col-tasks" id="col-fechamento"></div>
+      </div>
+      <div class="kanban-col" ondragover="allowDrop(event)" ondrop="drop(event, 'concluido')">
+        <div class="col-header">4. Concluído <span class="counter" id="count-concluido">0</span></div>
+        <div class="col-tasks" id="col-concluido"></div>
+      </div>
+    </div>
+
+    <!-- TELA CALENDÁRIO -->
+    <div id="view-calendar" class="calendar-view">
+      <div style="font-weight:700; color:#38bdf8;" id="calendar-month-title">Mês Vigente</div>
+      <div class="calendar-grid" id="calendar-grid"></div>
+    </div>
+  </main>
+
+  <!-- MODAL DE CADASTRO -->
+  <div class="modal-backdrop" id="modal-task">
+    <div class="modal-box">
+      <h3>Cadastrar Demanda Operacional</h3>
+      <div class="form-group">
+        <label>Título / Operação</label>
+        <input type="text" id="task-title" placeholder="Ex: Conferir canhoto Carreta 02">
+      </div>
+      <div class="form-group">
+        <label>Placa / Veículo / Motorista</label>
+        <input type="text" id="task-ref" placeholder="Ex: ABC-1234 (Agregado João)">
+      </div>
+      <div class="form-group">
+        <label>Etapa Inicial</label>
+        <select id="task-stage">
+          <option value="patio">Programação & Pátio</option>
+          <option value="transito">Trânsito & Ocorrências</option>
+          <option value="fechamento">Fechamento & CT-e</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Prazo / Horário Limite</label>
+        <input type="datetime-local" id="task-due">
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px;">
+        <button class="btn-outline" onclick="closeModal()">Cancelar</button>
+        <button class="btn-primary" onclick="saveTask()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AVISO DE ALARME -->
+  <div class="alarm-banner" id="alarm-banner">
+    <strong id="alarm-text">Atenção ao Prazo Operacional!</strong>
+    <button class="btn-outline" style="color:#fff; border-color:#fff; margin-left:10px;" onclick="dismissAlarm()">Dispensar</button>
+  </div>
+
+  <script>
+    let tasks = JSON.parse(localStorage.getItem('ops_tasks') || '[]');
+    let notifiedTasks = new Set();
+
+    function saveToStorage() {
+      localStorage.setItem('ops_tasks', JSON.stringify(tasks));
+    }
+
+    function switchView(view) {
+      document.getElementById('view-kanban').style.display = view === 'kanban' ? 'grid' : 'none';
+      document.getElementById('view-calendar').style.display = view === 'calendar' ? 'block' : 'none';
+      document.getElementById('btn-tab-kanban').classList.toggle('active', view === 'kanban');
+      document.getElementById('btn-tab-cal').classList.toggle('active', view === 'calendar');
+      if (view === 'calendar') renderCalendar();
+    }
+
+    function renderKanban() {
+      const q = document.getElementById('filtro-busca').value.toLowerCase();
+      const st = document.getElementById('filtro-setor').value;
+
+      ['patio', 'transito', 'fechamento', 'concluido'].forEach(col => {
+        document.getElementById('col-' + col).innerHTML = '';
+      });
+
+      const counts = { patio: 0, transito: 0, fechamento: 0, concluido: 0 };
+
+      tasks.forEach(t => {
+        const matchQ = t.title.toLowerCase().includes(q) || (t.ref && t.ref.toLowerCase().includes(q));
+        let matchSt = true;
+        if (st === 'Programação' && t.stage !== 'patio') matchSt = false;
+        if (st === 'Trânsito' && t.stage !== 'transito') matchSt = false;
+        if (st === 'Fechamento' && t.stage !== 'fechamento') matchSt = false;
+
+        if (matchQ && matchSt) {
+          counts[t.stage] = (counts[t.stage] || 0) + 1;
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.draggable = true;
+          card.ondragstart = (e) => e.dataTransfer.setData('text/plain', t.id);
+
+          const badgeClass = t.stage === 'patio' ? 'badge-patio' : (t.stage === 'transito' ? 'badge-transito' : 'badge-fechamento');
+          const dueFmt = t.due ? new Date(t.due).toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'}) : 'Sem prazo';
+
+          card.innerHTML = `
+            <div class="card-top">
+              <span class="badge ${badgeClass}">${t.stage}</span>
+              <span style="color:#64748b;">${dueFmt}</span>
+            </div>
+            <div class="card-title">${t.title}</div>
+            <div class="card-meta">Ref: <strong>${t.ref || 'N/A'}</strong></div>
+            <div class="card-actions">
+              <button class="btn-action" onclick="advanceTask('${t.id}')">Avançar ➔</button>
+              <button class="card-del" onclick="deleteTask('${t.id}')">Excluir</button>
+            </div>
+          `;
+          document.getElementById('col-' + t.stage).appendChild(card);
+        }
+      });
+
+      document.getElementById('count-patio').innerText = counts.patio;
+      document.getElementById('count-transito').innerText = counts.transito;
+      document.getElementById('count-fechamento').innerText = counts.fechamento;
+      document.getElementById('count-concluido').innerText = counts.concluido;
+    }
+
+    function advanceTask(id) {
+      const t = tasks.find(x => x.id === id);
+      if (!t) return;
+      if (t.stage === 'patio') t.stage = 'transito';
+      else if (t.stage === 'transito') t.stage = 'fechamento';
+      else if (t.stage === 'fechamento') t.stage = 'concluido';
+      saveToStorage();
+      renderKanban();
+    }
+
+    function deleteTask(id) {
+      tasks = tasks.filter(x => x.id !== id);
+      saveToStorage();
+      renderKanban();
+    }
+
+    function allowDrop(e) { e.preventDefault(); }
+    function drop(e, stage) {
+      e.preventDefault();
+      const id = e.dataTransfer.getData('text/plain');
+      const t = tasks.find(x => x.id === id);
+      if (t) {
+        t.stage = stage;
+        saveToStorage();
+        renderKanban();
+      }
+    }
+
+    function openModal() { document.getElementById('modal-task').style.display = 'flex'; }
+    function closeModal() { document.getElementById('modal-task').style.display = 'none'; }
+
+    function saveTask() {
+      const title = document.getElementById('task-title').value.trim();
+      const ref = document.getElementById('task-ref').value.trim();
+      const stage = document.getElementById('task-stage').value;
+      const due = document.getElementById('task-due').value;
+
+      if (!title) return alert('Digite ao menos o título da tarefa.');
+
+      tasks.push({
+        id: 'task_' + Date.now(),
+        title,
+        ref,
+        stage,
+        due
+      });
+
+      saveToStorage();
+      closeModal();
+      document.getElementById('task-title').value = '';
+      document.getElementById('task-ref').value = '';
+      document.getElementById('task-due').value = '';
+      renderKanban();
+    }
+
+    function playBeep() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, ctx.currentTime);
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.35);
+      } catch (err) {}
+    }
+
+    function checkAlarms() {
+      const now = new Date();
+      tasks.forEach(t => {
+        if (t.due && t.stage !== 'concluido' && !notifiedTasks.has(t.id)) {
+          const dueDate = new Date(t.due);
+          if (now >= dueDate) {
+            notifiedTasks.add(t.id);
+            playBeep();
+            const banner = document.getElementById('alarm-banner');
+            document.getElementById('alarm-text').innerText = `Prazo Vencido: ${t.title} (${t.ref || 'Operação'})`;
+            banner.style.display = 'block';
+          }
+        }
+      });
+    }
+
+    function dismissAlarm() {
+      document.getElementById('alarm-banner').style.display = 'none';
+    }
+
+    function renderCalendar() {
+      const grid = document.getElementById('calendar-grid');
+      grid.innerHTML = '';
+      const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+      days.forEach(d => {
+        const el = document.createElement('div');
+        el.className = 'cal-header-day';
+        el.innerText = d;
+        grid.appendChild(el);
+      });
+
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth();
+      document.getElementById('calendar-month-title').innerText = now.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' }).toUpperCase();
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const totalDays = new Date(year, month + 1, 0).getDate();
+
+      for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement('div');
+        grid.appendChild(empty);
+      }
+
+      for (let day = 1; day <= totalDays; day++) {
+        const cell = document.createElement('div');
+        cell.className = 'cal-day';
+        const isToday = day === now.getDate();
+        cell.innerHTML = `<div class="cal-day-num ${isToday ? 'today' : ''}">${day}</div>`;
+
+        const dayStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        tasks.filter(t => t.due && t.due.startsWith(dayStr)).forEach(t => {
+          const item = document.createElement('div');
+          item.className = 'cal-task-item';
+          item.innerText = t.title;
+          cell.appendChild(item);
+        });
+
+        grid.appendChild(cell);
+      }
+    }
+
+    function exportData() {
+      const blob = new Blob([JSON.stringify(tasks, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `backup_operacional_${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+    }
+
+    function importData(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          tasks = JSON.parse(e.target.result);
+          saveToStorage();
+          renderKanban();
+          alert('Dados carregados com sucesso!');
+        } catch (err) {
+          alert('Arquivo inválido.');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    setInterval(checkAlarms, 10000);
+    renderKanban();
+  </script>
+</body>
+</html>
