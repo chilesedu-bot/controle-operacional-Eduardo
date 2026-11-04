@@ -160,7 +160,7 @@
     /* KANBAN */
     .kanban-board {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 14px;
       align-items: start;
     }
@@ -219,12 +219,21 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 6px;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .badges-group {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      flex-wrap: wrap;
     }
 
     .badge {
       padding: 2px 6px;
       border-radius: 4px;
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       font-weight: 700;
       text-transform: uppercase;
     }
@@ -236,6 +245,13 @@
     .badge-atrasado { background: var(--accent-red); color: #fff; }
     .badge-ontime { background: #065f46; color: #34d399; }
 
+    /* PRIORIDADES */
+    .badge-prioridade-critica { background: #ef4444; color: #fff; }
+    .badge-prioridade-alta { background: #ea580c; color: #fff; }
+    .badge-prioridade-media { background: #ca8a04; color: #fff; }
+    .badge-prioridade-baixa { background: #0284c7; color: #fff; }
+    .badge-prioridade-sem { background: #475569; color: #cbd5e1; }
+
     .card-title {
       font-size: 0.9rem;
       font-weight: 600;
@@ -246,10 +262,23 @@
     .card-meta {
       font-size: 0.75rem;
       color: var(--text-muted);
-      line-height: 1.4;
+      line-height: 1.5;
       margin-bottom: 8px;
     }
     .card-meta strong { color: #cbd5e1; }
+
+    .meta-dono {
+      color: #38bdf8 !important;
+    }
+
+    .meta-parado {
+      color: #f59e0b !important;
+      background: rgba(245, 158, 11, 0.1);
+      padding: 2px 4px;
+      border-radius: 3px;
+      display: inline-block;
+      margin-top: 2px;
+    }
 
     .card-actions {
       display: flex;
@@ -338,8 +367,10 @@
       padding: 22px;
       border-radius: 8px;
       width: 90%;
-      max-width: 500px;
+      max-width: 520px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+      max-height: 90vh;
+      overflow-y: auto;
     }
 
     .modal-box h3 { font-size: 1.05rem; margin-bottom: 14px; color: var(--accent-cyan); }
@@ -354,615 +385,4 @@
       position: fixed;
       bottom: 24px; right: 24px;
       background: #7f1d1d;
-      border: 1px solid #ef4444;
-      color: #fff;
-      padding: 14px 18px;
-      border-radius: 6px;
-      z-index: 1000;
-    }
-  </style>
-</head>
-<body>
-
-  <header>
-    <div class="brand">
-      TORRE DE OPERAÇÕES <span>SUPERVISÃO</span>
-    </div>
-    <div class="header-actions">
-      <button class="btn-outline active" id="btn-tab-kanban" onclick="switchView('kanban')">Kanban</button>
-      <button class="btn-outline" id="btn-tab-cal" onclick="switchView('calendar')">Calendário</button>
-      <button class="btn-action" onclick="openPasteModal()">📋 Colar da Planilha</button>
-      <button class="btn-purple" onclick="openAnjunModal()">+ Lançar Pendência Financeiro</button>
-      <button class="btn-primary" onclick="openModal()">+ Nova Demanda</button>
-      <button class="btn-action" onclick="exportData()">Backup</button>
-      <button class="btn-action" onclick="document.getElementById('import-file').click()">Restaurar</button>
-      <input type="file" id="import-file" style="display:none;" onchange="importData(event)">
-    </div>
-  </header>
-
-  <main>
-    <!-- DASHBOARD KPIS -->
-    <div class="dashboard-kpis">
-      <div class="kpi-card kpi-blue" onclick="setQuickFilter('todas')">
-        <span class="kpi-label">TOTAL EM ABERTO</span>
-        <span class="kpi-val" id="kpi-aberto">0</span>
-      </div>
-      <div class="kpi-card kpi-green" onclick="setQuickFilter('prazo')">
-        <span class="kpi-label">DENTRO DO PRAZO</span>
-        <span class="kpi-val" id="kpi-prazo">0</span>
-      </div>
-      <div class="kpi-card kpi-red" onclick="setQuickFilter('atrasadas')">
-        <span class="kpi-label">FORA DO PRAZO (ATRASADAS)</span>
-        <span class="kpi-val" id="kpi-atrasadas">0</span>
-      </div>
-      <div class="kpi-card kpi-purple" onclick="setQuickFilter('cte')">
-        <span class="kpi-label">TOTAL PENDÊNCIAS FINANCEIRO</span>
-        <span class="kpi-val" id="kpi-cte">R$ 0,00</span>
-      </div>
-    </div>
-
-    <!-- FILTROS -->
-    <div class="filter-bar">
-      <input type="text" id="filtro-busca" placeholder="Filtrar por setor, filial, quinzena, placa ou título..." oninput="renderKanban()">
-      <select id="filtro-status-prazo" onchange="renderKanban()">
-        <option value="">Status de Prazo (Todos)</option>
-        <option value="atrasado">Apenas Fora do Prazo (Atrasadas)</option>
-        <option value="noprazo">Apenas Dentro do Prazo</option>
-      </select>
-      <select id="filtro-setor" onchange="renderKanban()">
-        <option value="">Todas as Etapas</option>
-        <option value="operacional">Operacional</option>
-        <option value="atendimento">Atendimento</option>
-        <option value="comercial">Comercial</option>
-        <option value="financeiro">Financeiro</option>
-        <option value="concluido">Concluído</option>
-      </select>
-    </div>
-
-    <!-- TELA KANBAN -->
-    <div id="view-kanban" class="kanban-board">
-      <div class="kanban-col" ondragover="allowDrop(event)" ondrop="drop(event, 'operacional')">
-        <div class="col-header">Operacional <span class="counter" id="count-operacional">0</span></div>
-        <div class="col-tasks" id="col-operacional"></div>
-      </div>
-      <div class="kanban-col" ondragover="allowDrop(event)" ondrop="drop(event, 'atendimento')">
-        <div class="col-header">Atendimento <span class="counter" id="count-atendimento">0</span></div>
-        <div class="col-tasks" id="col-atendimento"></div>
-      </div>
-      <div class="kanban-col" ondragover="allowDrop(event)" ondrop="drop(event, 'comercial')">
-        <div class="col-header">Comercial <span class="counter" id="count-comercial">0</span></div>
-        <div class="col-tasks" id="col-comercial"></div>
-      </div>
-      <div class="kanban-col" ondragover="allowDrop(event)" ondrop="drop(event, 'financeiro')">
-        <div class="col-header">Financeiro <span class="counter" id="count-financeiro">0</span></div>
-        <div class="col-tasks" id="col-financeiro"></div>
-      </div>
-      <div class="kanban-col" ondragover="allowDrop(event)" ondrop="drop(event, 'concluido')">
-        <div class="col-header">Concluído <span class="counter" id="count-concluido">0</span></div>
-        <div class="col-tasks" id="col-concluido"></div>
-      </div>
-    </div>
-
-    <!-- TELA CALENDÁRIO -->
-    <div id="view-calendar" class="calendar-view">
-      <div style="font-weight:700; color:var(--accent-cyan);" id="calendar-month-title">Mês Vigente</div>
-      <div class="calendar-grid" id="calendar-grid"></div>
-    </div>
-  </main>
-
-  <!-- MODAL NOVA DEMANDA / EDIÇÃO -->
-  <div class="modal-backdrop" id="modal-task">
-    <div class="modal-box">
-      <h3 id="modal-title-text">Cadastrar Demanda</h3>
-      <input type="hidden" id="edit-task-id">
-      <div class="form-group">
-        <label>Título / Descrição</label>
-        <input type="text" id="task-title" placeholder="Ex: Cotação frete spot ou retorno ao cliente">
-      </div>
-      <div class="form-group">
-        <label>Referência (Placa / Filial / Condutor / Cliente)</label>
-        <input type="text" id="task-ref" placeholder="Ex: Placa ABC-1234 ou Anjun SP">
-      </div>
-      <div class="form-group">
-        <label>Valor Envolvido (R$)</label>
-        <input type="number" step="0.01" id="task-val" placeholder="0.00">
-      </div>
-      <div class="form-group">
-        <label>Etapa / Setor</label>
-        <select id="task-stage">
-          <option value="operacional">Operacional</option>
-          <option value="atendimento">Atendimento</option>
-          <option value="comercial">Comercial</option>
-          <option value="financeiro">Financeiro</option>
-          <option value="concluido">Concluído</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Prazo Limite</label>
-        <input type="datetime-local" id="task-due">
-      </div>
-      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px;">
-        <button class="btn-outline" onclick="closeModal()">Cancelar</button>
-        <button class="btn-primary" onclick="saveTask()">Salvar</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL LANÇAMENTO FINANCEIRO ANJUN -->
-  <div class="modal-backdrop" id="modal-anjun">
-    <div class="modal-box">
-      <h3>Lançar Pendência Financeiro / CT-e</h3>
-      <div class="form-group">
-        <label>Filial / Cliente</label>
-        <input type="text" id="anjun-filial-input" placeholder="Ex: Anjun SP, Anjun BA, etc.">
-      </div>
-      <div class="form-group">
-        <label>Período / Quinzena</label>
-        <input type="text" id="anjun-quinzena-input" placeholder="Ex: 1ª Q Outubro, 2ª Q Novembro">
-      </div>
-      <div class="form-group">
-        <label>Valor Aproximado (R$)</label>
-        <input type="number" step="0.01" id="anjun-valor-input" placeholder="Ex: 20900.00">
-      </div>
-      <div class="form-group">
-        <label>Prazo Limite para Retorno Financeiro</label>
-        <input type="datetime-local" id="anjun-due-input">
-      </div>
-      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px;">
-        <button class="btn-outline" onclick="closeAnjunModal()">Cancelar</button>
-        <button class="btn-purple" onclick="saveManualAnjun()">Salvar no Financeiro</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL COLAR DA PLANILHA -->
-  <div class="modal-backdrop" id="modal-paste">
-    <div class="modal-box">
-      <h3>Colar Linhas da Planilha</h3>
-      <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px;">
-        Copie as linhas da sua folha de cálculo e cole abaixo no formato:<br>
-        <strong>Filial [TAB] Período [TAB] Valor</strong><br>
-        <em>Exemplo: Anjun SP [TAB] 1ª Q Outubro [TAB] 12800</em>
-      </p>
-      <div class="form-group">
-        <textarea id="paste-input" rows="7" placeholder="Cole aqui as linhas copiadas da planilha..."></textarea>
-      </div>
-      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px;">
-        <button class="btn-outline" onclick="closePasteModal()">Cancelar</button>
-        <button class="btn-primary" onclick="processPastedData()">Importar Linhas</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- AVISO DE ALARME -->
-  <div class="alarm-banner" id="alarm-banner">
-    <strong id="alarm-text">Prazo Operacional Expirado!</strong>
-    <button class="btn-outline" style="color:#fff; border-color:#fff; margin-left:10px;" onclick="dismissAlarm()">Dispensar</button>
-  </div>
-
-  <script>
-    let tasks = [];
-    try {
-      tasks = JSON.parse(localStorage.getItem('ops_tasks') || '[]');
-      if (!Array.isArray(tasks)) tasks = [];
-    } catch(e) {
-      tasks = [];
-    }
-
-    let notifiedTasks = new Set();
-
-    // Mapeamento limpo de tarefas antigas
-    tasks.forEach(t => {
-      if (t.stage === 'patio') t.stage = 'operacional';
-      else if (t.stage === 'transito') t.stage = 'atendimento';
-      else if (t.stage === 'fechamento') t.stage = 'financeiro';
-      else if (!['operacional', 'atendimento', 'comercial', 'financeiro', 'concluido'].includes(t.stage)) {
-        t.stage = 'operacional';
-      }
-    });
-
-    function saveToStorage() {
-      try {
-        localStorage.setItem('ops_tasks', JSON.stringify(tasks));
-      } catch(e) {}
-      updateDashboardKPIs();
-    }
-
-    function switchView(view) {
-      const kanban = document.getElementById('view-kanban');
-      const cal = document.getElementById('view-calendar');
-      const bKanban = document.getElementById('btn-tab-kanban');
-      const bCal = document.getElementById('btn-tab-cal');
-
-      if (view === 'kanban') {
-        kanban.style.display = 'grid';
-        cal.style.display = 'none';
-        bKanban.classList.add('active');
-        bCal.classList.remove('active');
-      } else {
-        kanban.style.display = 'none';
-        cal.style.display = 'block';
-        bKanban.classList.remove('active');
-        bCal.classList.add('active');
-        renderCalendar();
-      }
-    }
-
-    function isOverdue(task) {
-      if (!task.due || task.stage === 'concluido') return false;
-      return new Date() > new Date(task.due);
-    }
-
-    function updateDashboardKPIs() {
-      let totalAberto = 0;
-      let noPrazo = 0;
-      let atrasadas = 0;
-      let totalValorFinanceiro = 0;
-
-      tasks.forEach(t => {
-        if (t.stage !== 'concluido') {
-          totalAberto++;
-          if (isOverdue(t)) atrasadas++;
-          else noPrazo++;
-          
-          if (t.stage === 'financeiro' && t.val) {
-            totalValorFinanceiro += Number(t.val) || 0;
-          }
-        }
-      });
-
-      document.getElementById('kpi-aberto').innerText = totalAberto;
-      document.getElementById('kpi-prazo').innerText = noPrazo;
-      document.getElementById('kpi-atrasadas').innerText = atrasadas;
-      document.getElementById('kpi-cte').innerText = totalValorFinanceiro.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    }
-
-    function setQuickFilter(tipo) {
-      const statusSelect = document.getElementById('filtro-status-prazo');
-      const setorSelect = document.getElementById('filtro-setor');
-      if (tipo === 'atrasadas') {
-        statusSelect.value = 'atrasado';
-        setorSelect.value = '';
-      } else if (tipo === 'prazo') {
-        statusSelect.value = 'noprazo';
-        setorSelect.value = '';
-      } else if (tipo === 'cte') {
-        statusSelect.value = '';
-        setorSelect.value = 'financeiro';
-      } else {
-        statusSelect.value = '';
-        setorSelect.value = '';
-      }
-      renderKanban();
-    }
-
-    function renderKanban() {
-      const q = (document.getElementById('filtro-busca').value || '').toLowerCase();
-      const st = document.getElementById('filtro-setor').value;
-      const statusPrazo = document.getElementById('filtro-status-prazo').value;
-
-      ['operacional', 'atendimento', 'comercial', 'financeiro', 'concluido'].forEach(col => {
-        const el = document.getElementById('col-' + col);
-        if (el) el.innerHTML = '';
-      });
-
-      const counts = { operacional: 0, atendimento: 0, comercial: 0, financeiro: 0, concluido: 0 };
-
-      tasks.forEach(t => {
-        const titleMatch = (t.title || '').toLowerCase().includes(q);
-        const refMatch = (t.ref || '').toLowerCase().includes(q);
-        const matchQ = titleMatch || refMatch;
-        let matchSt = !st || t.stage === st;
-        
-        let overdue = isOverdue(t);
-        let matchPrazo = true;
-        if (statusPrazo === 'atrasado' && !overdue) matchPrazo = false;
-        if (statusPrazo === 'noprazo' && overdue) matchPrazo = false;
-
-        if (matchQ && matchSt && matchPrazo) {
-          if (counts[t.stage] !== undefined) counts[t.stage]++;
-          const card = document.createElement('div');
-          card.className = `card ${overdue ? 'card-overdue' : ''} ${t.stage === 'financeiro' ? 'card-cte' : ''}`;
-          card.draggable = true;
-          card.ondragstart = (e) => e.dataTransfer.setData('text/plain', t.id);
-
-          const badgeClass = `badge-${t.stage}`;
-          const badgeStatus = overdue 
-            ? '<span class="badge badge-atrasado">Atrasada</span>' 
-            : (t.due && t.stage !== 'concluido' ? '<span class="badge badge-ontime">No Prazo</span>' : '');
-
-          const dueFmt = t.due 
-            ? new Date(t.due).toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'}) 
-            : 'Sem prazo';
-
-          const valFmt = t.val ? `<div style="color:var(--accent-cyan); font-weight:700; margin-top:2px;">R$ ${Number(t.val).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>` : '';
-
-          card.innerHTML = `
-            <div class="card-top">
-              <span class="badge ${badgeClass}">${t.stage}</span>
-              <span style="font-size:0.7rem; color:${overdue ? '#ef4444' : '#64748b'};">${dueFmt}</span>
-            </div>
-            <div class="card-title">${t.title}</div>
-            <div class="card-meta">
-              Ref: <strong>${t.ref || 'N/A'}</strong>
-              ${valFmt}
-              <div style="margin-top:4px;">${badgeStatus}</div>
-            </div>
-            <div class="card-actions">
-              <div class="card-btn-group">
-                <button class="btn-action" onclick="editTask('${t.id}')">Editar</button>
-                <button class="btn-action" onclick="advanceTask('${t.id}')">Avançar ➔</button>
-              </div>
-              <button class="card-del" onclick="deleteTask('${t.id}')">Excluir</button>
-            </div>
-          `;
-          const targetCol = document.getElementById('col-' + t.stage);
-          if (targetCol) targetCol.appendChild(card);
-        }
-      });
-
-      ['operacional', 'atendimento', 'comercial', 'financeiro', 'concluido'].forEach(c => {
-        const el = document.getElementById('count-' + c);
-        if (el) el.innerText = counts[c];
-      });
-
-      updateDashboardKPIs();
-    }
-
-    function advanceTask(id) {
-      const t = tasks.find(x => x.id === id);
-      if (!t) return;
-      if (t.stage === 'operacional') t.stage = 'atendimento';
-      else if (t.stage === 'atendimento') t.stage = 'comercial';
-      else if (t.stage === 'comercial') t.stage = 'financeiro';
-      else if (t.stage === 'financeiro') t.stage = 'concluido';
-      saveToStorage();
-      renderKanban();
-    }
-
-    function editTask(id) {
-      const t = tasks.find(x => x.id === id);
-      if (!t) return;
-      document.getElementById('edit-task-id').value = t.id;
-      document.getElementById('task-title').value = t.title || '';
-      document.getElementById('task-ref').value = t.ref || '';
-      document.getElementById('task-val').value = t.val || '';
-      document.getElementById('task-stage').value = t.stage;
-      document.getElementById('task-due').value = t.due || '';
-      document.getElementById('modal-title-text').innerText = 'Editar Demanda';
-      openModal();
-    }
-
-    function deleteTask(id) {
-      tasks = tasks.filter(x => x.id !== id);
-      saveToStorage();
-      renderKanban();
-    }
-
-    function allowDrop(e) { e.preventDefault(); }
-    function drop(e, stage) {
-      e.preventDefault();
-      const id = e.dataTransfer.getData('text/plain');
-      const t = tasks.find(x => x.id === id);
-      if (t) {
-        t.stage = stage;
-        saveToStorage();
-        renderKanban();
-      }
-    }
-
-    /* CONTROLE DIRETO DOS MODAIS */
-    function openModal() {
-      document.getElementById('modal-task').style.display = 'flex';
-    }
-    function closeModal() { 
-      document.getElementById('modal-task').style.display = 'none'; 
-      document.getElementById('edit-task-id').value = '';
-      document.getElementById('modal-title-text').innerText = 'Cadastrar Demanda';
-    }
-
-    function openAnjunModal() {
-      document.getElementById('modal-anjun').style.display = 'flex';
-    }
-    function closeAnjunModal() { 
-      document.getElementById('modal-anjun').style.display = 'none'; 
-    }
-
-    function openPasteModal() {
-      document.getElementById('modal-paste').style.display = 'flex';
-    }
-    function closePasteModal() { 
-      document.getElementById('modal-paste').style.display = 'none'; 
-    }
-
-    function saveTask() {
-      const editId = document.getElementById('edit-task-id').value;
-      const title = document.getElementById('task-title').value.trim();
-      const ref = document.getElementById('task-ref').value.trim();
-      const val = document.getElementById('task-val').value;
-      const stage = document.getElementById('task-stage').value;
-      const due = document.getElementById('task-due').value;
-
-      if (!title) return alert('Por favor, informe o título da demanda.');
-
-      if (editId) {
-        const t = tasks.find(x => x.id === editId);
-        if (t) {
-          t.title = title;
-          t.ref = ref;
-          t.val = val ? parseFloat(val) : null;
-          t.stage = stage;
-          t.due = due;
-        }
-      } else {
-        tasks.push({
-          id: 'task_' + Date.now(),
-          title,
-          ref,
-          val: val ? parseFloat(val) : null,
-          stage,
-          due
-        });
-      }
-
-      saveToStorage();
-      closeModal();
-      document.getElementById('task-title').value = '';
-      document.getElementById('task-ref').value = '';
-      document.getElementById('task-val').value = '';
-      document.getElementById('task-due').value = '';
-      renderKanban();
-    }
-
-    function saveManualAnjun() {
-      const filial = document.getElementById('anjun-filial-input').value.trim() || 'Anjun Geral';
-      const quinzena = document.getElementById('anjun-quinzena-input').value.trim() || 'Quinzena Vigente';
-      const valor = document.getElementById('anjun-valor-input').value;
-      const due = document.getElementById('anjun-due-input').value;
-
-      tasks.push({
-        id: 'anjun_' + Date.now(),
-        title: `Emissão CT-e: ${filial} (${quinzena})`,
-        ref: 'Aguardando retorno financeiro',
-        val: valor ? parseFloat(valor) : null,
-        stage: 'financeiro',
-        due: due || null
-      });
-
-      saveToStorage();
-      closeAnjunModal();
-      document.getElementById('anjun-filial-input').value = '';
-      document.getElementById('anjun-quinzena-input').value = '';
-      document.getElementById('anjun-valor-input').value = '';
-      document.getElementById('anjun-due-input').value = '';
-      renderKanban();
-    }
-
-    function processPastedData() {
-      const raw = document.getElementById('paste-input').value.trim();
-      if (!raw) return alert('Cole as linhas da planilha antes de continuar.');
-
-      const lines = raw.split('\n');
-      let count = 0;
-
-      lines.forEach((line, idx) => {
-        const cols = line.split('\t').map(c => c.trim());
-        if (cols.length >= 2) {
-          const filial = cols[0];
-          const quinzena = cols[1];
-          let valorLimpo = null;
-          
-          if (cols[2]) {
-            let str = cols[2].replace('R$', '').replace(/\./g, '').replace(',', '.').trim();
-            valorLimpo = parseFloat(str);
-          }
-
-          tasks.push({
-            id: 'pasted_' + Date.now() + '_' + idx,
-            title: `Emissão CT-e: ${filial} (${quinzena})`,
-            ref: 'Aguardando retorno financeiro',
-            val: isNaN(valorLimpo) ? null : valorLimpo,
-            stage: 'financeiro',
-            due: null
-          });
-          count++;
-        }
-      });
-
-      saveToStorage();
-      closePasteModal();
-      document.getElementById('paste-input').value = '';
-      renderKanban();
-      alert(`${count} linhas importadas com sucesso para a coluna Financeiro!`);
-    }
-
-    function checkAlarms() {
-      const now = new Date();
-      tasks.forEach(t => {
-        if (t.due && t.stage !== 'concluido' && !notifiedTasks.has(t.id)) {
-          if (now >= new Date(t.due)) {
-            notifiedTasks.add(t.id);
-            const banner = document.getElementById('alarm-banner');
-            document.getElementById('alarm-text').innerText = `Prazo Vencido: ${t.title}`;
-            banner.style.display = 'block';
-          }
-        }
-      });
-    }
-
-    function dismissAlarm() {
-      document.getElementById('alarm-banner').style.display = 'none';
-    }
-
-    function renderCalendar() {
-      const grid = document.getElementById('calendar-grid');
-      grid.innerHTML = '';
-      const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-      days.forEach(d => {
-        const el = document.createElement('div');
-        el.className = 'cal-header-day';
-        el.innerText = d;
-        grid.appendChild(el);
-      });
-
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = now.getMonth();
-      document.getElementById('calendar-month-title').innerText = now.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' }).toUpperCase();
-
-      const firstDay = new Date(year, month, 1).getDay();
-      const totalDays = new Date(year, month + 1, 0).getDate();
-
-      for (let i = 0; i < firstDay; i++) {
-        grid.appendChild(document.createElement('div'));
-      }
-
-      for (let day = 1; day <= totalDays; day++) {
-        const cell = document.createElement('div');
-        cell.className = 'cal-day';
-        const isToday = day === now.getDate();
-        cell.innerHTML = `<div class="cal-day-num ${isToday ? 'today' : ''}">${day}</div>`;
-
-        const dayStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        tasks.filter(t => t.due && t.due.startsWith(dayStr)).forEach(t => {
-          const item = document.createElement('div');
-          item.className = 'cal-task-item';
-          item.innerText = t.title;
-          cell.appendChild(item);
-        });
-
-        grid.appendChild(cell);
-      }
-    }
-
-    function exportData() {
-      const blob = new Blob([JSON.stringify(tasks, null, 2)], { type: 'application/json' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `backup_operacional_${new Date().toISOString().slice(0,10)}.json`;
-      a.click();
-    }
-
-    function importData(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          tasks = JSON.parse(e.target.result);
-          if (!Array.isArray(tasks)) tasks = [];
-          saveToStorage();
-          renderKanban();
-          alert('Dados carregados com sucesso!');
-        } catch (err) {
-          alert('Arquivo inválido.');
-        }
-      };
-      reader.readAsText(file);
-    }
-
-    setInterval(checkAlarms, 10000);
-    renderKanban();
-  </script>
-</body>
-</html>
+      border: 1px
