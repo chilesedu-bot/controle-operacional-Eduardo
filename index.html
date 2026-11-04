@@ -276,6 +276,34 @@
       margin-top: 2px;
     }
 
+    .meta-obs {
+      background: #0b1322;
+      border-left: 2px solid #38bdf8;
+      padding: 4px 6px;
+      border-radius: 2px;
+      margin-top: 4px;
+      font-size: 0.72rem;
+      color: #cbd5e1;
+      white-space: pre-wrap;
+    }
+
+    .meta-anexo {
+      margin-top: 5px;
+    }
+
+    .btn-anexo {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #1e293b;
+      color: #38bdf8;
+      border: 1px solid #334155;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      text-decoration: none;
+    }
+
     .card-actions {
       display: flex;
       justify-content: space-between;
@@ -425,7 +453,7 @@
     </div>
 
     <div class="filter-bar">
-      <input type="text" id="filtro-busca" placeholder="Filtrar por dono, problema, filial, placa..." oninput="renderKanban()">
+      <input type="text" id="filtro-busca" placeholder="Filtrar por dono, problema, observação, filial..." oninput="renderKanban()">
       <select id="filtro-prioridade" onchange="renderKanban()">
         <option value="">Todas as Prioridades</option>
         <option value="critica">Crítica</option>
@@ -491,12 +519,12 @@
       
       <div class="form-group">
         <label>Quem é o dono do assunto?</label>
-        <input type="text" id="task-owner" placeholder="Ex: Eduardo, João, Carlos...">
+        <input type="text" id="task-owner" placeholder="Ex: Eduardo Chiles, Gerson, Nikolai...">
       </div>
 
       <div class="form-group">
         <label>Onde o problema está parado?</label>
-        <input type="text" id="task-bottleneck" placeholder="Ex: Aguardando retorno financeiro, Validação de taxa...">
+        <input type="text" id="task-bottleneck" placeholder="Ex: Aguardando negociação do Gerson com o Nikolai...">
       </div>
 
       <div class="form-group">
@@ -512,7 +540,7 @@
 
       <div class="form-group">
         <label>Referência (Placa / Filial / Condutor / Cliente)</label>
-        <input type="text" id="task-ref" placeholder="Ex: Placa ABC-1234 ou Anjun MT">
+        <input type="text" id="task-ref" placeholder="Ex: Anjun MT">
       </div>
 
       <div class="form-group">
@@ -534,6 +562,17 @@
       <div class="form-group">
         <label>Prazo Limite</label>
         <input type="datetime-local" id="task-due">
+      </div>
+
+      <div class="form-group">
+        <label>Observação (Informações Importantes)</label>
+        <textarea id="task-obs" rows="3" placeholder="Insira detalhes, histórico ou recados importantes sobre o processo..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Anexar Arquivo (Foto, Comprovante, PDF ou Planilha)</label>
+        <input type="file" id="task-file" accept="image/*,.pdf,.xlsx,.xls,.csv,.doc,.docx">
+        <div id="file-current-info" style="font-size:0.75rem; color:#38bdf8; margin-top:4px;"></div>
       </div>
 
       <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:16px;">
@@ -622,6 +661,8 @@
     }
 
     var notifiedTasks = new Set();
+    var currentAttachmentBase64 = null;
+    var currentAttachmentName = null;
 
     tasks.forEach(function(t) {
       if (t.stage === 'patio') t.stage = 'operacional';
@@ -633,12 +674,15 @@
       if (!t.priority) t.priority = 'media';
       if (!t.owner) t.owner = '';
       if (!t.bottleneck) t.bottleneck = '';
+      if (!t.obs) t.obs = '';
     });
 
     function saveToStorage() {
       try {
         localStorage.setItem('ops_tasks', JSON.stringify(tasks));
-      } catch(e) {}
+      } catch(e) {
+        alert('Atenção: Limite de armazenamento local atingido ao salvar anexos muito grandes.');
+      }
       updateDashboardKPIs();
     }
 
@@ -731,7 +775,8 @@
         var refMatch = (t.ref || '').toLowerCase().indexOf(q) !== -1;
         var ownerMatch = (t.owner || '').toLowerCase().indexOf(q) !== -1;
         var bottleneckMatch = (t.bottleneck || '').toLowerCase().indexOf(q) !== -1;
-        var matchQ = titleMatch || refMatch || ownerMatch || bottleneckMatch;
+        var obsMatch = (t.obs || '').toLowerCase().indexOf(q) !== -1;
+        var matchQ = titleMatch || refMatch || ownerMatch || bottleneckMatch || obsMatch;
         
         var matchSt = !st || t.stage === st;
         var matchPrio = !prio || t.priority === prio;
@@ -771,6 +816,9 @@
 
           var donoFmt = t.owner ? '<div>Dono: <strong class="meta-dono">' + t.owner + '</strong></div>' : '';
           var paradoFmt = t.bottleneck ? '<div>Parado em: <strong class="meta-parado">' + t.bottleneck + '</strong></div>' : '';
+          var obsFmt = t.obs ? '<div class="meta-obs"><strong>Obs:</strong> ' + t.obs + '</div>' : '';
+          var anexoFmt = (t.attachment && t.attachment.data) ? 
+            '<div class="meta-anexo"><a href="' + t.attachment.data + '" download="' + (t.attachment.name || 'anexo') + '" class="btn-anexo" target="_blank">📎 Baixar ' + (t.attachment.name || 'Anexo') + '</a></div>' : '';
 
           card.innerHTML = 
             '<div class="card-top">' +
@@ -785,6 +833,8 @@
               '<div>Ref: <strong>' + (t.ref || 'N/A') + '</strong></div>' +
               donoFmt +
               paradoFmt +
+              obsFmt +
+              anexoFmt +
               valFmt +
               '<div style="margin-top:6px;">' + badgeStatus + '</div>' +
             '</div>' +
@@ -832,6 +882,20 @@
       document.getElementById('task-val').value = t.val || '';
       document.getElementById('task-stage').value = t.stage;
       document.getElementById('task-due').value = t.due || '';
+      document.getElementById('task-obs').value = t.obs || '';
+
+      var fileInfo = document.getElementById('file-current-info');
+      if (t.attachment && t.attachment.name) {
+        fileInfo.innerText = 'Arquivo anexado atual: ' + t.attachment.name;
+        currentAttachmentBase64 = t.attachment.data;
+        currentAttachmentName = t.attachment.name;
+      } else {
+        fileInfo.innerText = '';
+        currentAttachmentBase64 = null;
+        currentAttachmentName = null;
+      }
+
+      document.getElementById('task-file').value = '';
       document.getElementById('modal-title-text').innerText = 'Editar Demanda';
       openModal();
     }
@@ -858,6 +922,10 @@
     function closeModal() { 
       document.getElementById('modal-task').style.display = 'none'; 
       document.getElementById('edit-task-id').value = '';
+      document.getElementById('file-current-info').innerText = '';
+      document.getElementById('task-file').value = '';
+      currentAttachmentBase64 = null;
+      currentAttachmentName = null;
       document.getElementById('modal-title-text').innerText = 'Cadastrar Demanda';
     }
 
@@ -866,6 +934,23 @@
 
     function openPasteModal() { document.getElementById('modal-paste').style.display = 'flex'; }
     function closePasteModal() { document.getElementById('modal-paste').style.display = 'none'; }
+
+    // Leitor de arquivo em base64
+    document.getElementById('task-file').addEventListener('change', function(e) {
+      var file = e.target.files[0];
+      if (file) {
+        if (file.size > 2.5 * 1024 * 1024) {
+          alert('Recomendamos arquivos de até 2.5MB para não sobrecarregar a memória do navegador.');
+        }
+        var reader = new FileReader();
+        reader.onload = function(evt) {
+          currentAttachmentBase64 = evt.target.result;
+          currentAttachmentName = file.name;
+          document.getElementById('file-current-info').innerText = 'Novo anexo selecionado: ' + file.name;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
 
     function saveTask() {
       var editId = document.getElementById('edit-task-id').value;
@@ -877,8 +962,14 @@
       var val = document.getElementById('task-val').value;
       var stage = document.getElementById('task-stage').value;
       var due = document.getElementById('task-due').value;
+      var obs = document.getElementById('task-obs').value.trim();
 
-      if (!title) return alert('Por favor, indique a descrição da tarefa.');
+      if (!title) return alert('Por favor, informe a descrição da tarefa.');
+
+      var attachmentObj = currentAttachmentBase64 ? {
+        name: currentAttachmentName,
+        data: currentAttachmentBase64
+      } : null;
 
       if (editId) {
         var t = tasks.find(function(x) { return x.id === editId; });
@@ -891,6 +982,8 @@
           t.val = val ? parseFloat(val) : null;
           t.stage = stage;
           t.due = due;
+          t.obs = obs;
+          if (attachmentObj) t.attachment = attachmentObj;
         }
       } else {
         tasks.push({
@@ -902,7 +995,9 @@
           ref: ref,
           val: val ? parseFloat(val) : null,
           stage: stage,
-          due: due
+          due: due,
+          obs: obs,
+          attachment: attachmentObj
         });
       }
 
@@ -914,6 +1009,7 @@
       document.getElementById('task-ref').value = '';
       document.getElementById('task-val').value = '';
       document.getElementById('task-due').value = '';
+      document.getElementById('task-obs').value = '';
       renderKanban();
     }
 
@@ -935,7 +1031,8 @@
         ref: filial + ' - ' + quinzena,
         val: valor ? parseFloat(valor) : null,
         stage: 'financeiro',
-        due: due || null
+        due: due || null,
+        obs: ''
       });
 
       saveToStorage();
@@ -976,7 +1073,8 @@
             ref: filial + ' - ' + quinzena,
             val: isNaN(valorLimpo) ? null : valorLimpo,
             stage: 'financeiro',
-            due: null
+            due: null,
+            obs: ''
           });
           count++;
         }
@@ -1068,7 +1166,7 @@
           renderKanban();
           alert('Dados carregados com sucesso!');
         } catch (err) {
-          alert('Ficheiro inválido.');
+          alert('Arquivo inválido.');
         }
       };
       reader.readAsText(file);
