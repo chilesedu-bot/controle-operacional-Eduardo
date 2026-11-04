@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Torre de Operações - Supervisão & Faturamento</title>
+  <title>Torre de Operações - Supervisão & Gestão Setorial</title>
   <style>
     :root {
       --bg-main: #070d18;
@@ -77,7 +77,7 @@
       cursor: pointer;
       border: none;
       border-radius: 6px;
-      padding: 7px 13px;
+      padding: 7px 12px;
       font-size: 0.8rem;
       font-weight: 600;
       transition: all 0.2s ease;
@@ -132,7 +132,7 @@
 
     .kpi-card:hover { border-color: var(--accent-cyan); }
     .kpi-card .kpi-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; }
-    .kpi-card .kpi-val { font-size: 1.5rem; font-weight: 800; font-family: monospace; }
+    .kpi-card .kpi-val { font-size: 1.4rem; font-weight: 800; font-family: monospace; }
     .kpi-card.kpi-blue .kpi-val { color: var(--accent-cyan); }
     .kpi-card.kpi-green .kpi-val { color: var(--accent-green); }
     .kpi-card.kpi-red .kpi-val { color: var(--accent-red); }
@@ -160,8 +160,8 @@
     /* KANBAN */
     .kanban-board {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
       align-items: start;
     }
 
@@ -228,9 +228,10 @@
       font-weight: 700;
       text-transform: uppercase;
     }
-    .badge-patio { background: #0369a1; color: #fff; }
-    .badge-transito { background: #d97706; color: #fff; }
-    .badge-fechamento { background: #7c3aed; color: #fff; }
+    .badge-operacional { background: #0369a1; color: #fff; }
+    .badge-atendimento { background: #059669; color: #fff; }
+    .badge-comercial { background: #d97706; color: #fff; }
+    .badge-financeiro { background: #7c3aed; color: #fff; }
     .badge-atrasado { background: var(--accent-red); color: #fff; }
     .badge-ontime { background: #065f46; color: #34d399; }
 
@@ -256,6 +257,12 @@
       border-top: 1px solid #1e293b;
       padding-top: 8px;
       margin-top: 6px;
+      gap: 6px;
+    }
+
+    .card-btn-group {
+      display: flex;
+      gap: 6px;
     }
 
     .card-del {
@@ -330,7 +337,7 @@
       padding: 22px;
       border-radius: 8px;
       width: 100%;
-      max-width: 480px;
+      max-width: 500px;
     }
 
     .modal-box h3 { font-size: 1rem; margin-bottom: 14px; color: var(--accent-cyan); }
@@ -362,7 +369,8 @@
     <div class="header-actions">
       <button class="btn-outline active" id="btn-tab-kanban" onclick="switchView('kanban')">Kanban</button>
       <button class="btn-outline" id="btn-tab-cal" onclick="switchView('calendar')">Calendário</button>
-      <button class="btn-purple" onclick="openAnjunModal()">+ Inserir Lote ANJUN</button>
+      <button class="btn-action" onclick="openPasteModal()">📋 Colar da Planilha</button>
+      <button class="btn-purple" onclick="openAnjunModal()">+ Lançar Pendência Financeiro</button>
       <button class="btn-primary" onclick="openModal()">+ Nova Demanda</button>
       <button class="btn-action" onclick="exportData()">Backup</button>
       <button class="btn-action" onclick="document.getElementById('import-file').click()">Restaurar</button>
@@ -386,14 +394,14 @@
         <span class="kpi-val" id="kpi-atrasadas">0</span>
       </div>
       <div class="kpi-card kpi-purple" onclick="setQuickFilter('cte')">
-        <span class="kpi-label">PENDÊNCIAS CT-E / ANJUN</span>
+        <span class="kpi-label">TOTAL PENDÊNCIAS FINANCEIRO</span>
         <span class="kpi-val" id="kpi-cte">R$ 0,00</span>
       </div>
     </div>
 
     <!-- FILTROS -->
     <div class="filter-bar">
-      <input type="text" id="filtro-busca" placeholder="Filtrar por filial, carga, placa ou título..." oninput="renderKanban()">
+      <input type="text" id="filtro-busca" placeholder="Filtrar por setor, filial, quinzena, placa ou título..." oninput="renderKanban()">
       <select id="filtro-status-prazo" onchange="renderKanban()">
         <option value="">Status de Prazo (Todos)</option>
         <option value="atrasado">Apenas Fora do Prazo (Atrasadas)</option>
@@ -401,28 +409,34 @@
       </select>
       <select id="filtro-setor" onchange="renderKanban()">
         <option value="">Todas as Etapas</option>
-        <option value="patio">Programação & Pátio</option>
-        <option value="transito">Trânsito & Ocorrências</option>
-        <option value="fechamento">Fechamento & CT-e</option>
+        <option value="operacional">Operacional</option>
+        <option value="atendimento">Atendimento</option>
+        <option value="comercial">Comercial</option>
+        <option value="financeiro">Financeiro</option>
+        <option value="concluido">Concluído</option>
       </select>
     </div>
 
     <!-- TELA KANBAN -->
     <div id="view-kanban" class="kanban-board">
-      <div class="kanban-col" ondragover="allowDrop(event)" ondrop="drop(event, 'patio')">
-        <div class="col-header">1. Programação & Pátio <span class="counter" id="count-patio">0</span></div>
-        <div class="col-tasks" id="col-patio"></div>
+      <div class="kanban-col" ondragover="allowDrop(event)" ondrop="drop(event, 'operacional')">
+        <div class="col-header">Operacional <span class="counter" id="count-operacional">0</span></div>
+        <div class="col-tasks" id="col-operacional"></div>
       </div>
-      <div class="kanban-col" ondragover="allowDrop(event)" ondrop="drop(event, 'transito')">
-        <div class="col-header">2. Trânsito & Ocorrências <span class="counter" id="count-transito">0</span></div>
-        <div class="col-tasks" id="col-transito"></div>
+      <div class="kanban-col" ondragover="allowDrop(event)" ondrop="drop(event, 'atendimento')">
+        <div class="col-header">Atendimento <span class="counter" id="count-atendimento">0</span></div>
+        <div class="col-tasks" id="col-atendimento"></div>
       </div>
-      <div class="kanban-col" ondragover="allowDrop(event)" ondrop="drop(event, 'fechamento')">
-        <div class="col-header">3. Fechamento & CT-e <span class="counter" id="count-fechamento">0</span></div>
-        <div class="col-tasks" id="col-fechamento"></div>
+      <div class="kanban-col" ondragover="allowDrop(event)" ondrop="drop(event, 'comercial')">
+        <div class="col-header">Comercial <span class="counter" id="count-comercial">0</span></div>
+        <div class="col-tasks" id="col-comercial"></div>
+      </div>
+      <div class="kanban-col" ondragover="allowDrop(event)" ondrop="drop(event, 'financeiro')">
+        <div class="col-header">Financeiro <span class="counter" id="count-financeiro">0</span></div>
+        <div class="col-tasks" id="col-financeiro"></div>
       </div>
       <div class="kanban-col" ondragover="allowDrop(event)" ondrop="drop(event, 'concluido')">
-        <div class="col-header">4. Concluído <span class="counter" id="count-concluido">0</span></div>
+        <div class="col-header">Concluído <span class="counter" id="count-concluido">0</span></div>
         <div class="col-tasks" id="col-concluido"></div>
       </div>
     </div>
@@ -434,28 +448,31 @@
     </div>
   </main>
 
-  <!-- MODAL NOVA DEMANDA GERAL -->
+  <!-- MODAL NOVA DEMANDA / EDIÇÃO -->
   <div class="modal-backdrop" id="modal-task">
     <div class="modal-box">
-      <h3>Cadastrar Demanda Operacional</h3>
+      <h3 id="modal-title-text">Cadastrar Demanda</h3>
+      <input type="hidden" id="edit-task-id">
       <div class="form-group">
-        <label>Título / Operação</label>
-        <input type="text" id="task-title" placeholder="Ex: Liberação de doca ou faturamento">
+        <label>Título / Descrição</label>
+        <input type="text" id="task-title" placeholder="Ex: Cotação de frete spot ou retorno ao cliente">
       </div>
       <div class="form-group">
-        <label>Referência (Placa / Filial / Condutor)</label>
-        <input type="text" id="task-ref" placeholder="Ex: Anjun SP ou Placa ABC-1234">
+        <label>Referência (Placa / Filial / Condutor / Cliente)</label>
+        <input type="text" id="task-ref" placeholder="Ex: Placa ABC-1234 ou Anjun SP">
       </div>
       <div class="form-group">
-        <label>Valor Envolvido (R$) - Opcional</label>
+        <label>Valor Envolvido (R$)</label>
         <input type="number" step="0.01" id="task-val" placeholder="0.00">
       </div>
       <div class="form-group">
-        <label>Etapa Inicial</label>
+        <label>Etapa / Setor</label>
         <select id="task-stage">
-          <option value="patio">Programação & Pátio</option>
-          <option value="transito">Trânsito & Ocorrências</option>
-          <option value="fechamento">Fechamento & CT-e</option>
+          <option value="operacional">Operacional</option>
+          <option value="atendimento">Atendimento</option>
+          <option value="comercial">Comercial</option>
+          <option value="financeiro">Financeiro</option>
+          <option value="concluido">Concluído</option>
         </select>
       </div>
       <div class="form-group">
@@ -469,31 +486,48 @@
     </div>
   </div>
 
-  <!-- MODAL IMPORTAÇÃO RÁPIDA ANJUN -->
+  <!-- MODAL LANÇAMENTO FINANCEIRO ANJUN -->
   <div class="modal-backdrop" id="modal-anjun">
     <div class="modal-box">
-      <h3>Importar Lote Faturamento ANJUN</h3>
-      <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:12px;">
-        Selecione para lançar as pendências de faturamento da folha diretamente na etapa de Fechamento & CT-e.
-      </p>
+      <h3>Lançar Pendência Financeiro / CT-e</h3>
       <div class="form-group">
-        <label>Filial ANJUN</label>
-        <select id="anjun-filial">
-          <option value="Anjun SP">Anjun SP (Total: R$ 20.900,00)</option>
-          <option value="Anjun PI">Anjun PI (Total: R$ 65.212,56)</option>
-          <option value="Anjun GO">Anjun GO (Total: R$ 160.506,80)</option>
-          <option value="Anjun BA">Anjun BA (Total: R$ 185.370,53)</option>
-          <option value="Anjun RJ">Anjun RJ (Total: R$ 124.804,60)</option>
-          <option value="TODAS">Carregar TODAS as Filiais (R$ 556.794,49)</option>
-        </select>
+        <label>Filial / Cliente</label>
+        <input type="text" id="anjun-filial-input" placeholder="Ex: Anjun SP, Anjun BA, etc.">
+      </div>
+      <div class="form-group">
+        <label>Período / Quinzena</label>
+        <input type="text" id="anjun-quinzena-input" placeholder="Ex: 1ª Q Outubro, 2ª Q Novembro">
+      </div>
+      <div class="form-group">
+        <label>Valor Aproximado (R$)</label>
+        <input type="number" step="0.01" id="anjun-valor-input" placeholder="Ex: 20900.00">
       </div>
       <div class="form-group">
         <label>Prazo Limite para Retorno Financeiro</label>
-        <input type="datetime-local" id="anjun-due">
+        <input type="datetime-local" id="anjun-due-input">
       </div>
       <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px;">
         <button class="btn-outline" onclick="closeAnjunModal()">Cancelar</button>
-        <button class="btn-purple" onclick="importAnjunData()">Lançar na Coluna CT-e</button>
+        <button class="btn-purple" onclick="saveManualAnjun()">Salvar no Financeiro</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL COLAR DA PLANILHA -->
+  <div class="modal-backdrop" id="modal-paste">
+    <div class="modal-box">
+      <h3>Colar Linhas da Planilha</h3>
+      <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px;">
+        Copie as linhas da sua folha de cálculo e cole abaixo no formato:<br>
+        <strong>Filial [TAB] Período [TAB] Valor</strong><br>
+        <em>Exemplo: Anjun SP [TAB] 1ª Q Outubro [TAB] 12800</em>
+      </p>
+      <div class="form-group">
+        <textarea id="paste-input" rows="7" placeholder="Cole aqui as linhas copiadas da planilha..."></textarea>
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px;">
+        <button class="btn-outline" onclick="closePasteModal()">Cancelar</button>
+        <button class="btn-primary" onclick="processPastedData()">Importar Linhas</button>
       </div>
     </div>
   </div>
@@ -507,6 +541,13 @@
   <script>
     let tasks = JSON.parse(localStorage.getItem('ops_tasks') || '[]');
     let notifiedTasks = new Set();
+
+    // Mapeamento de retrocompatibilidade para dados legados
+    tasks.forEach(t => {
+      if (t.stage === 'patio') t.stage = 'operacional';
+      if (t.stage === 'transito') t.stage = 'atendimento';
+      if (t.stage === 'fechamento') t.stage = 'financeiro';
+    });
 
     function saveToStorage() {
       localStorage.setItem('ops_tasks', JSON.stringify(tasks));
@@ -530,7 +571,7 @@
       let totalAberto = 0;
       let noPrazo = 0;
       let atrasadas = 0;
-      let totalValorCTE = 0;
+      let totalValorFinanceiro = 0;
 
       tasks.forEach(t => {
         if (t.stage !== 'concluido') {
@@ -540,21 +581,34 @@
           } else {
             noPrazo++;
           }
-          if (t.val) totalValorCTE += Number(t.val);
+          if (t.stage === 'financeiro' && t.val) {
+            totalValorFinanceiro += Number(t.val);
+          }
         }
       });
 
       document.getElementById('kpi-aberto').innerText = totalAberto;
       document.getElementById('kpi-prazo').innerText = noPrazo;
       document.getElementById('kpi-atrasadas').innerText = atrasadas;
-      document.getElementById('kpi-cte').innerText = totalValorCTE.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      document.getElementById('kpi-cte').innerText = totalValorFinanceiro.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
 
     function setQuickFilter(tipo) {
       const statusSelect = document.getElementById('filtro-status-prazo');
-      if (tipo === 'atrasadas') statusSelect.value = 'atrasado';
-      else if (tipo === 'prazo') statusSelect.value = 'noprazo';
-      else statusSelect.value = '';
+      const setorSelect = document.getElementById('filtro-setor');
+      if (tipo === 'atrasadas') {
+        statusSelect.value = 'atrasado';
+        setorSelect.value = '';
+      } else if (tipo === 'prazo') {
+        statusSelect.value = 'noprazo';
+        setorSelect.value = '';
+      } else if (tipo === 'cte') {
+        statusSelect.value = '';
+        setorSelect.value = 'financeiro';
+      } else {
+        statusSelect.value = '';
+        setorSelect.value = '';
+      }
       renderKanban();
     }
 
@@ -563,11 +617,11 @@
       const st = document.getElementById('filtro-setor').value;
       const statusPrazo = document.getElementById('filtro-status-prazo').value;
 
-      ['patio', 'transito', 'fechamento', 'concluido'].forEach(col => {
+      ['operacional', 'atendimento', 'comercial', 'financeiro', 'concluido'].forEach(col => {
         document.getElementById('col-' + col).innerHTML = '';
       });
 
-      const counts = { patio: 0, transito: 0, fechamento: 0, concluido: 0 };
+      const counts = { operacional: 0, atendimento: 0, comercial: 0, financeiro: 0, concluido: 0 };
 
       tasks.forEach(t => {
         const matchQ = t.title.toLowerCase().includes(q) || (t.ref && t.ref.toLowerCase().includes(q));
@@ -581,10 +635,11 @@
         if (matchQ && matchSt && matchPrazo) {
           counts[t.stage] = (counts[t.stage] || 0) + 1;
           const card = document.createElement('div');
-          card.className = `card ${overdue ? 'card-overdue' : ''} ${t.isCTE ? 'card-cte' : ''}`;
+          card.className = `card ${overdue ? 'card-overdue' : ''} ${t.stage === 'financeiro' ? 'card-cte' : ''}`;
           card.draggable = true;
           card.ondragstart = (e) => e.dataTransfer.setData('text/plain', t.id);
 
+          const badgeClass = `badge-${t.stage}`;
           const badgeStatus = overdue 
             ? '<span class="badge badge-atrasado">Atrasada</span>' 
             : (t.due && t.stage !== 'concluido' ? '<span class="badge badge-ontime">No Prazo</span>' : '');
@@ -597,16 +652,20 @@
 
           card.innerHTML = `
             <div class="card-top">
-              ${badgeStatus}
+              <span class="badge ${badgeClass}">${t.stage}</span>
               <span style="font-size:0.7rem; color:${overdue ? '#ef4444' : '#64748b'};">${dueFmt}</span>
             </div>
             <div class="card-title">${t.title}</div>
             <div class="card-meta">
-              Ref: <strong>${t.ref || 'Operação'}</strong>
+              Ref: <strong>${t.ref || 'N/A'}</strong>
               ${valFmt}
+              <div style="margin-top:4px;">${badgeStatus}</div>
             </div>
             <div class="card-actions">
-              <button class="btn-action" onclick="advanceTask('${t.id}')">Avançar ➔</button>
+              <div class="card-btn-group">
+                <button class="btn-action" onclick="editTask('${t.id}')">Editar</button>
+                <button class="btn-action" onclick="advanceTask('${t.id}')">Avançar ➔</button>
+              </div>
               <button class="card-del" onclick="deleteTask('${t.id}')">Excluir</button>
             </div>
           `;
@@ -614,9 +673,10 @@
         }
       });
 
-      document.getElementById('count-patio').innerText = counts.patio;
-      document.getElementById('count-transito').innerText = counts.transito;
-      document.getElementById('count-fechamento').innerText = counts.fechamento;
+      document.getElementById('count-operacional').innerText = counts.operacional;
+      document.getElementById('count-atendimento').innerText = counts.atendimento;
+      document.getElementById('count-comercial').innerText = counts.comercial;
+      document.getElementById('count-financeiro').innerText = counts.financeiro;
       document.getElementById('count-concluido').innerText = counts.concluido;
       updateDashboardKPIs();
     }
@@ -624,11 +684,25 @@
     function advanceTask(id) {
       const t = tasks.find(x => x.id === id);
       if (!t) return;
-      if (t.stage === 'patio') t.stage = 'transito';
-      else if (t.stage === 'transito') t.stage = 'fechamento';
-      else if (t.stage === 'fechamento') t.stage = 'concluido';
+      if (t.stage === 'operacional') t.stage = 'atendimento';
+      else if (t.stage === 'atendimento') t.stage = 'comercial';
+      else if (t.stage === 'comercial') t.stage = 'financeiro';
+      else if (t.stage === 'financeiro') t.stage = 'concluido';
       saveToStorage();
       renderKanban();
+    }
+
+    function editTask(id) {
+      const t = tasks.find(x => x.id === id);
+      if (!t) return;
+      document.getElementById('edit-task-id').value = t.id;
+      document.getElementById('task-title').value = t.title;
+      document.getElementById('task-ref').value = t.ref || '';
+      document.getElementById('task-val').value = t.val || '';
+      document.getElementById('task-stage').value = t.stage;
+      document.getElementById('task-due').value = t.due || '';
+      document.getElementById('modal-title-text').innerText = 'Editar Demanda';
+      openModal();
     }
 
     function deleteTask(id) {
@@ -650,160 +724,11 @@
     }
 
     function openModal() { document.getElementById('modal-task').style.display = 'flex'; }
-    function closeModal() { document.getElementById('modal-task').style.display = 'none'; }
+    function closeModal() { 
+      document.getElementById('modal-task').style.display = 'none'; 
+      document.getElementById('edit-task-id').value = '';
+      document.getElementById('modal-title-text').innerText = 'Cadastrar Demanda';
+    }
 
     function openAnjunModal() { document.getElementById('modal-anjun').style.display = 'flex'; }
     function closeAnjunModal() { document.getElementById('modal-anjun').style.display = 'none'; }
-
-    function saveTask() {
-      const title = document.getElementById('task-title').value.trim();
-      const ref = document.getElementById('task-ref').value.trim();
-      const val = document.getElementById('task-val').value;
-      const stage = document.getElementById('task-stage').value;
-      const due = document.getElementById('task-due').value;
-
-      if (!title) return alert('Por favor, indique a descrição da tarefa.');
-
-      tasks.push({
-        id: 'task_' + Date.now(),
-        title,
-        ref,
-        val: val ? parseFloat(val) : null,
-        stage,
-        due,
-        isCTE: stage === 'fechamento'
-      });
-
-      saveToStorage();
-      closeModal();
-      document.getElementById('task-title').value = '';
-      document.getElementById('task-ref').value = '';
-      document.getElementById('task-val').value = '';
-      document.getElementById('task-due').value = '';
-      renderKanban();
-    }
-
-    /* CARREGAMENTO AUTOMÁTICO DAS PENDÊNCIAS DA FOLHA ANJUN */
-    function importAnjunData() {
-      const opt = document.getElementById('anjun-filial').value;
-      const due = document.getElementById('anjun-due').value;
-
-      const baseAnjun = [
-        { filial: 'Anjun SP', quinzena: '1ª Q Outubro', val: 12800.00 },
-        { filial: 'Anjun SP', quinzena: '2ª Q Outubro', val: 8100.00 },
-        { filial: 'Anjun PI', quinzena: '2ª Q Outubro', val: 65212.56 },
-        { filial: 'Anjun GO', quinzena: '2ª Q Outubro', val: 160506.80 },
-        { filial: 'Anjun BA', quinzena: '1ª Q Outubro', val: 110712.45 },
-        { filial: 'Anjun BA', quinzena: '2ª Q Outubro', val: 74658.08 },
-        { filial: 'Anjun RJ', quinzena: '1ª Q Outubro', val: 43052.20 },
-        { filial: 'Anjun RJ', quinzena: '2ª Q Outubro', val: 81752.40 }
-      ];
-
-      const toAdd = opt === 'TODAS' ? baseAnjun : baseAnjun.filter(x => x.filial === opt);
-
-      toAdd.forEach((item, idx) => {
-        tasks.push({
-          id: 'anjun_' + Date.now() + '_' + idx,
-          title: `Emissão CT-e: ${item.filial} (${item.quinzena})`,
-          ref: 'Aguardando retorno financeiro',
-          val: item.val,
-          stage: 'fechamento',
-          due: due || null,
-          isCTE: true
-        });
-      });
-
-      saveToStorage();
-      closeAnjunModal();
-      renderKanban();
-    }
-
-    function checkAlarms() {
-      const now = new Date();
-      tasks.forEach(t => {
-        if (t.due && t.stage !== 'concluido' && !notifiedTasks.has(t.id)) {
-          if (now >= new Date(t.due)) {
-            notifiedTasks.add(t.id);
-            const banner = document.getElementById('alarm-banner');
-            document.getElementById('alarm-text').innerText = `Prazo Vencido: ${t.title}`;
-            banner.style.display = 'block';
-          }
-        }
-      });
-    }
-
-    function dismissAlarm() {
-      document.getElementById('alarm-banner').style.display = 'none';
-    }
-
-    function renderCalendar() {
-      const grid = document.getElementById('calendar-grid');
-      grid.innerHTML = '';
-      const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-      days.forEach(d => {
-        const el = document.createElement('div');
-        el.className = 'cal-header-day';
-        el.innerText = d;
-        grid.appendChild(el);
-      });
-
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = now.getMonth();
-      document.getElementById('calendar-month-title').innerText = now.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' }).toUpperCase();
-
-      const firstDay = new Date(year, month, 1).getDay();
-      const totalDays = new Date(year, month + 1, 0).getDate();
-
-      for (let i = 0; i < firstDay; i++) {
-        grid.appendChild(document.createElement('div'));
-      }
-
-      for (let day = 1; day <= totalDays; day++) {
-        const cell = document.createElement('div');
-        cell.className = 'cal-day';
-        const isToday = day === now.getDate();
-        cell.innerHTML = `<div class="cal-day-num ${isToday ? 'today' : ''}">${day}</div>`;
-
-        const dayStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        tasks.filter(t => t.due && t.due.startsWith(dayStr)).forEach(t => {
-          const item = document.createElement('div');
-          item.className = 'cal-task-item';
-          item.innerText = t.title;
-          cell.appendChild(item);
-        });
-
-        grid.appendChild(cell);
-      }
-    }
-
-    function exportData() {
-      const blob = new Blob([JSON.stringify(tasks, null, 2)], { type: 'application/json' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `backup_operacional_${new Date().toISOString().slice(0,10)}.json`;
-      a.click();
-    }
-
-    function importData(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          tasks = JSON.parse(e.target.result);
-          saveToStorage();
-          renderKanban();
-          alert('Dados carregados com sucesso!');
-        } catch (err) {
-          alert('Ficheiro inválido.');
-        }
-      };
-      reader.readAsText(file);
-    }
-
-    setInterval(checkAlarms, 10000);
-    renderKanban();
-  </script>
-</body>
-</html>
