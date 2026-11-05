@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eduardo Chiles - Kanban</title>
+  <title>Kanban - Eduardo Chiles</title>
   <style>
     :root {
       --bg-main: #070d18;
@@ -160,7 +160,7 @@
     }
     .filter-bar input:focus, .filter-bar select:focus { border-color: var(--accent-cyan); }
 
-    /* KANBAN COM CABEÇALHOS TRAVADOS E ROLAGEM */
+    /* KANBAN */
     .kanban-board {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -179,7 +179,6 @@
       overflow: hidden;
     }
 
-    /* TOPO TRAVADO */
     .col-header {
       padding: 12px 14px;
       background: #0d1527;
@@ -204,7 +203,6 @@
       font-family: monospace;
     }
 
-    /* ÁREA DE CARDS ROLÁVEL COM BARRA FINA */
     .col-tasks {
       padding: 12px;
       flex: 1;
@@ -216,23 +214,23 @@
       scrollbar-color: #334155 transparent;
     }
 
-    .col-tasks::-webkit-scrollbar {
-      width: 6px;
-    }
-    .col-tasks::-webkit-scrollbar-thumb {
-      background: #334155;
-      border-radius: 4px;
-    }
+    .col-tasks::-webkit-scrollbar { width: 6px; }
+    .col-tasks::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
 
+    /* CARD ESTILIZADO */
     .card {
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: 8px;
       padding: 12px;
-      cursor: grab;
-      transition: transform 0.15s, border-color 0.15s;
+      cursor: pointer;
+      transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
     }
-    .card:hover { background: var(--bg-card-hover); border-color: var(--accent-cyan); }
+    .card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent-cyan);
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.15);
+    }
     .card.card-overdue { border-left: 4px solid var(--accent-red); }
     .card.card-cte { border-left: 4px solid var(--accent-purple); }
 
@@ -274,8 +272,8 @@
     .badge-prioridade-sem { background: #475569; color: #cbd5e1; }
 
     .card-title {
-      font-size: 0.9rem;
-      font-weight: 600;
+      font-size: 0.92rem;
+      font-weight: 700;
       color: #f8fafc;
       margin-bottom: 6px;
     }
@@ -309,21 +307,16 @@
       white-space: pre-wrap;
     }
 
-    .meta-anexo {
-      margin-top: 5px;
-    }
-
-    .btn-anexo {
+    .card-comments-count {
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      background: #1e293b;
-      color: #38bdf8;
-      border: 1px solid #334155;
-      padding: 3px 8px;
-      border-radius: 4px;
       font-size: 0.7rem;
-      text-decoration: none;
+      color: #94a3b8;
+      background: #1e293b;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-top: 5px;
     }
 
     .card-actions {
@@ -336,8 +329,6 @@
       gap: 6px;
     }
 
-    .card-btn-group { display: flex; gap: 6px; }
-
     .card-del {
       background: transparent;
       color: #ef4444;
@@ -345,82 +336,194 @@
       padding: 2px 6px;
     }
 
-    /* CALENDÁRIO */
-    .calendar-view {
-      display: none;
-      background: #090f1d;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 20px;
-    }
-
-    .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 6px;
-      margin-top: 14px;
-    }
-
-    .cal-header-day {
-      text-align: center;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      padding: 8px 0;
-    }
-
-    .cal-day {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      min-height: 90px;
-      padding: 6px;
-      border-radius: 4px;
-      font-size: 0.75rem;
-    }
-
-    .cal-day-num { font-weight: 700; color: #64748b; margin-bottom: 4px; }
-    .cal-day-num.today { color: var(--accent-amber); }
-
-    .cal-task-item {
-      background: #1e293b;
-      border-left: 2px solid var(--accent-cyan);
-      padding: 2px 4px;
-      margin-bottom: 3px;
-      border-radius: 2px;
-      font-size: 0.7rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    /* MODAIS */
+    /* MODAL DE DETALHES ESTILO SEGUNDA IMAGEM */
     .modal-backdrop {
       display: none;
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.75);
+      background: rgba(0,0,0,0.8);
       justify-content: center;
       align-items: center;
       z-index: 999;
     }
 
-    .modal-box {
-      background: #0f172a;
+    .card-detail-box {
+      background: #0d1527;
       border: 1px solid var(--border-accent);
-      padding: 22px;
-      border-radius: 8px;
-      width: 90%;
-      max-width: 520px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
-      max-height: 90vh;
-      overflow-y: auto;
+      border-radius: 10px;
+      width: 95%;
+      max-width: 980px;
+      height: 90vh;
+      max-height: 850px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+      overflow: hidden;
     }
 
-    .modal-box h3 { font-size: 1.05rem; margin-bottom: 14px; color: var(--accent-cyan); }
-    .form-group { margin-bottom: 12px; }
-    .form-group label { display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; font-weight: 600; }
-    .form-group input, .form-group select, .form-group textarea {
-      width: 100%; background: #070d18; border: 1px solid var(--border); color: var(--text); padding: 8px 10px; border-radius: 4px; font-size: 0.85rem; outline: none;
+    .detail-header {
+      background: #080d18;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .detail-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--accent-amber);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .detail-body {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      overflow: hidden;
+    }
+
+    @media (max-width: 800px) {
+      .detail-body { grid-template-columns: 1fr; overflow-y: auto; }
+    }
+
+    /* COLUNA ESQUERDA: DADOS */
+    .detail-left {
+      padding: 20px;
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .field-group label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .field-input, .field-select, .field-textarea {
+      background: #070d18;
+      border: 1px solid var(--border-accent);
+      color: var(--text);
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      outline: none;
+    }
+
+    .field-input:focus, .field-select:focus, .field-textarea:focus {
+      border-color: var(--accent-cyan);
+    }
+
+    /* COLUNA DIREITA: FEED DE CONVERSA */
+    .detail-right {
+      background: #0a1120;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .feed-header {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .feed-list {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .comment-bubble {
+      background: #152238;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .comment-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.72rem;
+    }
+
+    .comment-author {
+      font-weight: 700;
+      color: var(--accent-amber);
+    }
+
+    .comment-time {
+      color: #64748b;
+    }
+
+    .comment-text {
+      font-size: 0.82rem;
+      color: #e2e8f0;
+      white-space: pre-wrap;
+      line-height: 1.4;
+    }
+
+    .feed-input-box {
+      padding: 12px 16px;
+      border-top: 1px solid var(--border);
+      background: #080e1b;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .feed-input-box textarea {
+      background: #070d18;
+      border: 1px solid var(--border-accent);
+      color: #f1f5f9;
+      padding: 8px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      resize: none;
+      outline: none;
+    }
+
+    .feed-input-box textarea:focus {
+      border-color: var(--accent-cyan);
+    }
+
+    .btn-anexo {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #1e293b;
+      color: #38bdf8;
+      border: 1px solid #334155;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      text-decoration: none;
     }
 
     .alarm-banner {
@@ -440,14 +543,14 @@
 
   <header>
     <div class="brand">
-  KANBAN <span>EDUARDO CHILES</span>
-</div>
+      KANBAN <span>EDUARDO CHILES</span>
+    </div>
     <div class="header-actions">
       <button class="btn-outline active" id="btn-tab-kanban" onclick="switchView('kanban')">Kanban</button>
       <button class="btn-outline" id="btn-tab-cal" onclick="switchView('calendar')">Calendário</button>
       <button class="btn-action" onclick="openPasteModal()">📋 Colar da Planilha</button>
       <button class="btn-purple" onclick="openAnjunModal()">+ Lançar Pendência Financeiro</button>
-      <button class="btn-primary" onclick="openModal()">+ Nova Demanda</button>
+      <button class="btn-primary" onclick="createNewTask()">+ Nova Demanda</button>
       <button class="btn-action" onclick="exportData()">Backup</button>
       <button class="btn-action" onclick="document.getElementById('import-file').click()">Restaurar</button>
       <input type="file" id="import-file" style="display:none;" onchange="importData(event)">
@@ -475,7 +578,7 @@
     </div>
 
     <div class="filter-bar">
-      <input type="text" id="filtro-busca" placeholder="Filtrar por dono, problema, observação, filial..." oninput="renderKanban()">
+      <input type="text" id="filtro-busca" placeholder="Filtrar por dono, problema, observação, comentário, filial..." oninput="renderKanban()">
       <select id="filtro-prioridade" onchange="renderKanban()">
         <option value="">Todas as Prioridades</option>
         <option value="critica">Crítica</option>
@@ -522,125 +625,129 @@
       </div>
     </div>
 
-    <div id="view-calendar" class="calendar-view">
+    <div id="view-calendar" class="calendar-view" style="display:none; background:#090f1d; border:1px solid var(--border); border-radius:8px; padding:20px;">
       <div style="font-weight:700; color:var(--accent-cyan);" id="calendar-month-title">Mês Vigente</div>
-      <div class="calendar-grid" id="calendar-grid"></div>
+      <div class="calendar-grid" id="calendar-grid" style="display:grid; grid-template-columns:repeat(7, 1fr); gap:6px; margin-top:14px;"></div>
     </div>
   </main>
 
-  <!-- MODAL CADASTRO / EDIÇÃO -->
-  <div class="modal-backdrop" id="modal-task">
-    <div class="modal-box">
-      <h3 id="modal-title-text">Cadastrar Demanda</h3>
-      <input type="hidden" id="edit-task-id">
-      
-      <div class="form-group">
-        <label>Título / Descrição</label>
-        <input type="text" id="task-title" placeholder="Ex: Cotação frete spot ou retorno ao cliente">
-      </div>
-      
-      <div class="form-group">
-        <label>Quem é o dono do assunto?</label>
-        <input type="text" id="task-owner" placeholder="Ex: Eduardo Chiles, Gerson, Nikolai...">
+  <!-- MODAL DE DETALHES COMPLETO (ESTILO SEGUNDA IMAGEM) -->
+  <div class="modal-backdrop" id="modal-detail">
+    <div class="card-detail-box">
+      <div class="detail-header">
+        <div class="detail-title" id="detail-card-title">Título da Demanda</div>
+        <button class="btn-outline" style="border:none; font-size:1.1rem; color:#94a3b8;" onclick="closeDetailModal()">✕</button>
       </div>
 
-      <div class="form-group">
-        <label>Onde o problema está parado?</label>
-        <input type="text" id="task-bottleneck" placeholder="Ex: Aguardando negociação do Gerson com o Nikolai...">
-      </div>
+      <div class="detail-body">
+        <!-- COLUNA ESQUERDA: DADOS -->
+        <div class="detail-left">
+          <input type="hidden" id="detail-task-id">
+          
+          <div class="field-group">
+            <label>Título / Descrição</label>
+            <input type="text" id="detail-title-input" class="field-input" onchange="autoSaveCurrentTask()">
+          </div>
 
-      <div class="form-group">
-        <label>Prioridade</label>
-        <select id="task-priority">
-          <option value="critica">Crítica</option>
-          <option value="alta">Alta</option>
-          <option value="media" selected>Média</option>
-          <option value="baixa">Baixa</option>
-          <option value="sem">Sem urgência</option>
-        </select>
-      </div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+            <div class="field-group">
+              <label>Etapa / Setor</label>
+              <select id="detail-stage-input" class="field-select" onchange="autoSaveCurrentTask()">
+                <option value="operacional">Operacional</option>
+                <option value="atendimento">Atendimento</option>
+                <option value="comercial">Comercial</option>
+                <option value="financeiro">Financeiro</option>
+                <option value="concluido">Concluído</option>
+              </select>
+            </div>
 
-      <div class="form-group">
-        <label>Referência (Placa / Filial / Condutor / Cliente)</label>
-        <input type="text" id="task-ref" placeholder="Ex: Anjun MT">
-      </div>
+            <div class="field-group">
+              <label>Prioridade</label>
+              <select id="detail-priority-input" class="field-select" onchange="autoSaveCurrentTask()">
+                <option value="critica">Crítica</option>
+                <option value="alta">Alta</option>
+                <option value="media">Média</option>
+                <option value="baixa">Baixa</option>
+                <option value="sem">Sem urgência</option>
+              </select>
+            </div>
+          </div>
 
-      <div class="form-group">
-        <label>Valor Envolvido (R$)</label>
-        <input type="number" step="0.01" id="task-val" placeholder="0.00">
-      </div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+            <div class="field-group">
+              <label>Dono do Assunto</label>
+              <input type="text" id="detail-owner-input" class="field-input" placeholder="Ex: Eduardo Chiles" onchange="autoSaveCurrentTask()">
+            </div>
+            <div class="field-group">
+              <label>Referência (Placa / Filial)</label>
+              <input type="text" id="detail-ref-input" class="field-input" placeholder="Ex: Anjun MT" onchange="autoSaveCurrentTask()">
+            </div>
+          </div>
 
-      <div class="form-group">
-        <label>Etapa / Setor</label>
-        <select id="task-stage">
-          <option value="operacional">Operacional</option>
-          <option value="atendimento">Atendimento</option>
-          <option value="comercial">Comercial</option>
-          <option value="financeiro">Financeiro</option>
-          <option value="concluido">Concluído</option>
-        </select>
-      </div>
+          <div class="field-group">
+            <label>Onde o problema está parado?</label>
+            <input type="text" id="detail-bottleneck-input" class="field-input" placeholder="Ex: Aguardando negociação..." onchange="autoSaveCurrentTask()">
+          </div>
 
-      <div class="form-group">
-        <label>Prazo Limite</label>
-        <input type="datetime-local" id="task-due">
-      </div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+            <div class="field-group">
+              <label>Valor Envolvido (R$)</label>
+              <input type="number" step="0.01" id="detail-val-input" class="field-input" placeholder="0.00" onchange="autoSaveCurrentTask()">
+            </div>
+            <div class="field-group">
+              <label>Prazo Limite</label>
+              <input type="datetime-local" id="detail-due-input" class="field-input" onchange="autoSaveCurrentTask()">
+            </div>
+          </div>
 
-      <div class="form-group">
-        <label>Observação (Informações Importantes)</label>
-        <textarea id="task-obs" rows="3" placeholder="Insira detalhes, histórico ou recados importantes sobre o processo..."></textarea>
-      </div>
+          <div class="field-group">
+            <label>Descrição / Observações Gerais</label>
+            <textarea id="detail-obs-input" class="field-textarea" rows="4" placeholder="Insira o contexto detalhado da demanda..." onchange="autoSaveCurrentTask()"></textarea>
+          </div>
 
-      <div class="form-group">
-        <label>Anexar Arquivo (Foto, Comprovante, PDF ou Planilha)</label>
-        <input type="file" id="task-file" accept="image/*,.pdf,.xlsx,.xls,.csv,.doc,.docx">
-        <div id="file-current-info" style="font-size:0.75rem; color:#38bdf8; margin-top:4px;"></div>
-      </div>
+          <div class="field-group">
+            <label>Anexos</label>
+            <div id="detail-attachment-wrapper" style="margin-bottom:6px;"></div>
+            <input type="file" id="detail-file-input" accept="image/*,.pdf,.xlsx,.xls,.csv,.doc,.docx">
+          </div>
+        </div>
 
-      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:16px;">
-        <button class="btn-outline" onclick="closeModal()">Cancelar</button>
-        <button class="btn-primary" onclick="saveTask()">Salvar</button>
+        <!-- COLUNA DIREITA: FEED DE CONVERSA -->
+        <div class="detail-right">
+          <div class="feed-header">
+            <span>Conversa do cartão</span>
+            <span id="detail-comments-badge" style="background:#1e293b; color:#38bdf8; font-size:0.75rem; padding:2px 8px; border-radius:10px;">0 mensagens</span>
+          </div>
+
+          <div class="feed-list" id="detail-comments-list"></div>
+
+          <div class="feed-input-box">
+            <textarea id="new-comment-text" rows="3" placeholder="Escreva uma nova informação ou atualização..."></textarea>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <input type="text" id="comment-author-input" placeholder="Seu nome" value="Eduardo Chiles" style="background:#070d18; border:1px solid var(--border-accent); color:#94a3b8; font-size:0.75rem; padding:5px 8px; border-radius:4px; width:140px;">
+              <button class="btn-primary" onclick="addCommentToCard()">Comentar</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- MODAL ANJUN FINANCEIRO -->
   <div class="modal-backdrop" id="modal-anjun">
-    <div class="modal-box">
-      <h3>Lançar Pendência Financeiro / CT-e</h3>
-      <div class="form-group">
-        <label>Filial / Cliente</label>
-        <input type="text" id="anjun-filial-input" placeholder="Ex: Anjun MT, Anjun SP...">
+    <div style="background:#0f172a; border:1px solid var(--border-accent); padding:22px; border-radius:8px; width:90%; max-width:500px;">
+      <h3 style="color:var(--accent-cyan); font-size:1.05rem; margin-bottom:14px;">Lançar Pendência Financeiro / CT-e</h3>
+      <div style="margin-bottom:12px;">
+        <label style="display:block; font-size:0.75rem; color:var(--text-muted); margin-bottom:4px; font-weight:600;">Filial / Cliente</label>
+        <input type="text" id="anjun-filial-input" class="field-input" style="width:100%;" placeholder="Ex: Anjun MT">
       </div>
-      <div class="form-group">
-        <label>Período / Quinzena</label>
-        <input type="text" id="anjun-quinzena-input" placeholder="Ex: 1ª Q Outubro, 2ª Q Novembro">
+      <div style="margin-bottom:12px;">
+        <label style="display:block; font-size:0.75rem; color:var(--text-muted); margin-bottom:4px; font-weight:600;">Período / Quinzena</label>
+        <input type="text" id="anjun-quinzena-input" class="field-input" style="width:100%;" placeholder="Ex: 1ª Q Outubro">
       </div>
-      <div class="form-group">
-        <label>Quem é o dono do assunto?</label>
-        <input type="text" id="anjun-owner-input" placeholder="Ex: Faturamento Anjun / Eduardo">
-      </div>
-      <div class="form-group">
-        <label>Onde o problema está parado?</label>
-        <input type="text" id="anjun-bottleneck-input" value="Aguardando retorno financeiro para emissão do CTE">
-      </div>
-      <div class="form-group">
-        <label>Prioridade</label>
-        <select id="anjun-priority-input">
-          <option value="critica">Crítica</option>
-          <option value="alta" selected>Alta</option>
-          <option value="media">Média</option>
-          <option value="baixa">Baixa</option>
-          <option value="sem">Sem urgência</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Valor Aproximado (R$)</label>
-        <input type="number" step="0.01" id="anjun-valor-input" placeholder="Ex: 20900.00">
-      </div>
-      <div class="form-group">
-        <label>Prazo Limite para Retorno Financeiro</label>
-        <input type="datetime-local" id="anjun-due-input">
+      <div style="margin-bottom:12px;">
+        <label style="display:block; font-size:0.75rem; color:var(--text-muted); margin-bottom:4px; font-weight:600;">Valor Aproximado (R$)</label>
+        <input type="number" step="0.01" id="anjun-valor-input" class="field-input" style="width:100%;" placeholder="20900.00">
       </div>
       <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:16px;">
         <button class="btn-outline" onclick="closeAnjunModal()">Cancelar</button>
@@ -651,15 +758,13 @@
 
   <!-- MODAL COLAR DA PLANILHA -->
   <div class="modal-backdrop" id="modal-paste">
-    <div class="modal-box">
-      <h3>Colar Linhas da Planilha</h3>
+    <div style="background:#0f172a; border:1px solid var(--border-accent); padding:22px; border-radius:8px; width:90%; max-width:500px;">
+      <h3 style="color:var(--accent-cyan); font-size:1.05rem; margin-bottom:14px;">Colar Linhas da Planilha</h3>
       <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px;">
-        Copie as linhas da folha de cálculo e cole abaixo no formato:<br>
+        Copie as linhas da folha e cole abaixo no formato:<br>
         <strong>Filial [TAB] Período [TAB] Valor</strong>
       </p>
-      <div class="form-group">
-        <textarea id="paste-input" rows="7" placeholder="Cole aqui as linhas copiadas..."></textarea>
-      </div>
+      <textarea id="paste-input" rows="7" class="field-textarea" style="width:100%;" placeholder="Cole aqui as linhas copiadas..."></textarea>
       <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px;">
         <button class="btn-outline" onclick="closePasteModal()">Cancelar</button>
         <button class="btn-primary" onclick="processPastedData()">Importar Linhas</button>
@@ -667,7 +772,6 @@
     </div>
   </div>
 
-  <!-- AVISO DE ALARME -->
   <div class="alarm-banner" id="alarm-banner">
     <strong id="alarm-text">Prazo Operacional Expirado!</strong>
     <button class="btn-outline" style="color:#fff; border-color:#fff; margin-left:10px;" onclick="dismissAlarm()">Dispensar</button>
@@ -683,8 +787,6 @@
     }
 
     var notifiedTasks = new Set();
-    var currentAttachmentBase64 = null;
-    var currentAttachmentName = null;
 
     tasks.forEach(function(t) {
       if (t.stage === 'patio') t.stage = 'operacional';
@@ -697,13 +799,14 @@
       if (!t.owner) t.owner = '';
       if (!t.bottleneck) t.bottleneck = '';
       if (!t.obs) t.obs = '';
+      if (!Array.isArray(t.comments)) t.comments = [];
     });
 
     function saveToStorage() {
       try {
         localStorage.setItem('ops_tasks', JSON.stringify(tasks));
       } catch(e) {
-        alert('Atenção: Limite de armazenamento local atingido ao salvar anexos muito grandes.');
+        alert('Atenção: Limite de armazenamento local atingido.');
       }
       updateDashboardKPIs();
     }
@@ -798,8 +901,15 @@
         var ownerMatch = (t.owner || '').toLowerCase().indexOf(q) !== -1;
         var bottleneckMatch = (t.bottleneck || '').toLowerCase().indexOf(q) !== -1;
         var obsMatch = (t.obs || '').toLowerCase().indexOf(q) !== -1;
-        var matchQ = titleMatch || refMatch || ownerMatch || bottleneckMatch || obsMatch;
         
+        var commentsMatch = false;
+        if (Array.isArray(t.comments)) {
+          commentsMatch = t.comments.some(function(c) {
+            return (c.text || '').toLowerCase().indexOf(q) !== -1 || (c.author || '').toLowerCase().indexOf(q) !== -1;
+          });
+        }
+
+        var matchQ = titleMatch || refMatch || ownerMatch || bottleneckMatch || obsMatch || commentsMatch;
         var matchSt = !st || t.stage === st;
         var matchPrio = !prio || t.priority === prio;
         
@@ -814,6 +924,13 @@
           card.className = 'card ' + (overdue ? 'card-overdue ' : '') + (t.stage === 'financeiro' ? 'card-cte' : '');
           card.draggable = true;
           card.ondragstart = function(e) { e.dataTransfer.setData('text/plain', t.id); };
+          
+          // Abrir card ao clicar nele
+          card.onclick = function(e) {
+            if (!e.target.closest('button') && !e.target.closest('a')) {
+              openDetailModal(t.id);
+            }
+          };
 
           var badgeClass = 'badge-' + t.stage;
           var badgeStatus = overdue 
@@ -840,7 +957,10 @@
           var paradoFmt = t.bottleneck ? '<div>Parado em: <strong class="meta-parado">' + t.bottleneck + '</strong></div>' : '';
           var obsFmt = t.obs ? '<div class="meta-obs"><strong>Obs:</strong> ' + t.obs + '</div>' : '';
           var anexoFmt = (t.attachment && t.attachment.data) ? 
-            '<div class="meta-anexo"><a href="' + t.attachment.data + '" download="' + (t.attachment.name || 'anexo') + '" class="btn-anexo" target="_blank">📎 Baixar ' + (t.attachment.name || 'Anexo') + '</a></div>' : '';
+            '<div style="margin-top:5px;"><a href="' + t.attachment.data + '" download="' + (t.attachment.name || 'anexo') + '" class="btn-anexo" target="_blank">📎 ' + (t.attachment.name || 'Anexo') + '</a></div>' : '';
+
+          var commentsCount = (t.comments && t.comments.length) ? 
+            '<div><span class="card-comments-count">💬 ' + t.comments.length + ' histórico(s)</span></div>' : '';
 
           card.innerHTML = 
             '<div class="card-top">' +
@@ -857,14 +977,12 @@
               paradoFmt +
               obsFmt +
               anexoFmt +
+              commentsCount +
               valFmt +
               '<div style="margin-top:6px;">' + badgeStatus + '</div>' +
             '</div>' +
             '<div class="card-actions">' +
-              '<div class="card-btn-group">' +
-                '<button class="btn-action" onclick="editTask(\'' + t.id + '\')">Editar</button>' +
-                '<button class="btn-action" onclick="advanceTask(\'' + t.id + '\')">Avançar ➔</button>' +
-              '</div>' +
+              '<button class="btn-action" onclick="advanceTask(\'' + t.id + '\')">Avançar ➔</button>' +
               '<button class="card-del" onclick="deleteTask(\'' + t.id + '\')">Excluir</button>' +
             '</div>';
 
@@ -892,40 +1010,12 @@
       renderKanban();
     }
 
-    function editTask(id) {
-      var t = tasks.find(function(x) { return x.id === id; });
-      if (!t) return;
-      document.getElementById('edit-task-id').value = t.id;
-      document.getElementById('task-title').value = t.title || '';
-      document.getElementById('task-owner').value = t.owner || '';
-      document.getElementById('task-bottleneck').value = t.bottleneck || '';
-      document.getElementById('task-priority').value = t.priority || 'media';
-      document.getElementById('task-ref').value = t.ref || '';
-      document.getElementById('task-val').value = t.val || '';
-      document.getElementById('task-stage').value = t.stage;
-      document.getElementById('task-due').value = t.due || '';
-      document.getElementById('task-obs').value = t.obs || '';
-
-      var fileInfo = document.getElementById('file-current-info');
-      if (t.attachment && t.attachment.name) {
-        fileInfo.innerText = 'Arquivo anexado atual: ' + t.attachment.name;
-        currentAttachmentBase64 = t.attachment.data;
-        currentAttachmentName = t.attachment.name;
-      } else {
-        fileInfo.innerText = '';
-        currentAttachmentBase64 = null;
-        currentAttachmentName = null;
-      }
-
-      document.getElementById('task-file').value = '';
-      document.getElementById('modal-title-text').innerText = 'Editar Demanda';
-      openModal();
-    }
-
     function deleteTask(id) {
+      if (!confirm('Deseja realmente excluir esta demanda?')) return;
       tasks = tasks.filter(function(x) { return x.id !== id; });
       saveToStorage();
       renderKanban();
+      closeDetailModal();
     }
 
     function allowDrop(e) { e.preventDefault(); }
@@ -940,15 +1030,163 @@
       }
     }
 
-    function openModal() { document.getElementById('modal-task').style.display = 'flex'; }
-    function closeModal() { 
-      document.getElementById('modal-task').style.display = 'none'; 
-      document.getElementById('edit-task-id').value = '';
-      document.getElementById('file-current-info').innerText = '';
-      document.getElementById('task-file').value = '';
-      currentAttachmentBase64 = null;
-      currentAttachmentName = null;
-      document.getElementById('modal-title-text').innerText = 'Cadastrar Demanda';
+    /* CONTROLE DA JANELA DO CARD COMPLETO */
+    function openDetailModal(id) {
+      var t = tasks.find(function(x) { return x.id === id; });
+      if (!t) return;
+
+      document.getElementById('detail-task-id').value = t.id;
+      document.getElementById('detail-card-title').innerText = t.title || 'Detalhes da Demanda';
+      document.getElementById('detail-title-input').value = t.title || '';
+      document.getElementById('detail-stage-input').value = t.stage || 'operacional';
+      document.getElementById('detail-priority-input').value = t.priority || 'media';
+      document.getElementById('detail-owner-input').value = t.owner || '';
+      document.getElementById('detail-ref-input').value = t.ref || '';
+      document.getElementById('detail-bottleneck-input').value = t.bottleneck || '';
+      document.getElementById('detail-val-input').value = t.val || '';
+      document.getElementById('detail-due-input').value = t.due || '';
+      document.getElementById('detail-obs-input').value = t.obs || '';
+
+      renderDetailAttachment(t);
+      renderDetailComments(t);
+
+      document.getElementById('modal-detail').style.display = 'flex';
+    }
+
+    function closeDetailModal() {
+      document.getElementById('modal-detail').style.display = 'none';
+      document.getElementById('detail-task-id').value = '';
+      renderKanban();
+    }
+
+    function renderDetailAttachment(t) {
+      var wrapper = document.getElementById('detail-attachment-wrapper');
+      if (t.attachment && t.attachment.data) {
+        wrapper.innerHTML = '<a href="' + t.attachment.data + '" download="' + (t.attachment.name || 'anexo') + '" class="btn-anexo" target="_blank">📎 Baixar ' + (t.attachment.name || 'Anexo') + '</a> ' +
+          '<button class="card-del" style="margin-left:8px;" onclick="removeAttachmentFromCard()">Remover Anexo</button>';
+      } else {
+        wrapper.innerHTML = '<span style="font-size:0.75rem; color:#64748b;">Nenhum arquivo anexado.</span>';
+      }
+    }
+
+    function removeAttachmentFromCard() {
+      var id = document.getElementById('detail-task-id').value;
+      var t = tasks.find(function(x) { return x.id === id; });
+      if (!t) return;
+      t.attachment = null;
+      saveToStorage();
+      renderDetailAttachment(t);
+    }
+
+    document.getElementById('detail-file-input').addEventListener('change', function(e) {
+      var file = e.target.files[0];
+      if (!file) return;
+      if (file.size > 2.5 * 1024 * 1024) {
+        alert('Recomendamos arquivos de até 2.5MB para melhor desempenho.');
+      }
+      var reader = new FileReader();
+      reader.onload = function(evt) {
+        var id = document.getElementById('detail-task-id').value;
+        var t = tasks.find(function(x) { return x.id === id; });
+        if (t) {
+          t.attachment = { name: file.name, data: evt.target.result };
+          saveToStorage();
+          renderDetailAttachment(t);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+
+    function autoSaveCurrentTask() {
+      var id = document.getElementById('detail-task-id').value;
+      var t = tasks.find(function(x) { return x.id === id; });
+      if (!t) return;
+
+      t.title = document.getElementById('detail-title-input').value.trim() || 'Sem título';
+      t.stage = document.getElementById('detail-stage-input').value;
+      t.priority = document.getElementById('detail-priority-input').value;
+      t.owner = document.getElementById('detail-owner-input').value.trim();
+      t.ref = document.getElementById('detail-ref-input').value.trim();
+      t.bottleneck = document.getElementById('detail-bottleneck-input').value.trim();
+      var val = document.getElementById('detail-val-input').value;
+      t.val = val ? parseFloat(val) : null;
+      t.due = document.getElementById('detail-due-input').value;
+      t.obs = document.getElementById('detail-obs-input').value.trim();
+
+      document.getElementById('detail-card-title').innerText = t.title;
+      saveToStorage();
+    }
+
+    function renderDetailComments(t) {
+      var list = document.getElementById('detail-comments-list');
+      list.innerHTML = '';
+      var comments = Array.isArray(t.comments) ? t.comments : [];
+      document.getElementById('detail-comments-badge').innerText = comments.length + ' mensagens';
+
+      if (comments.length === 0) {
+        list.innerHTML = '<div style="font-size:0.75rem; color:#64748b; text-align:center; padding:20px;">Nenhum comentário registrado ainda. Envie a primeira mensagem abaixo.</div>';
+        return;
+      }
+
+      comments.forEach(function(c) {
+        var bubble = document.createElement('div');
+        bubble.className = 'comment-bubble';
+        bubble.innerHTML = 
+          '<div class="comment-top">' +
+            '<span class="comment-author">' + (c.author || 'Usuário') + '</span>' +
+            '<span class="comment-time">' + (c.date || '') + '</span>' +
+          '</div>' +
+          '<div class="comment-text">' + c.text + '</div>';
+        list.appendChild(bubble);
+      });
+
+      list.scrollTop = list.scrollHeight;
+    }
+
+    function addCommentToCard() {
+      var id = document.getElementById('detail-task-id').value;
+      var t = tasks.find(function(x) { return x.id === id; });
+      if (!t) return;
+
+      var text = document.getElementById('new-comment-text').value.trim();
+      var author = document.getElementById('comment-author-input').value.trim() || 'Eduardo Chiles';
+
+      if (!text) return alert('Digite um comentário antes de enviar.');
+
+      var now = new Date();
+      var dateStr = now.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'}) + ' ' + 
+                    now.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+
+      if (!Array.isArray(t.comments)) t.comments = [];
+      t.comments.push({
+        author: author,
+        text: text,
+        date: dateStr
+      });
+
+      saveToStorage();
+      document.getElementById('new-comment-text').value = '';
+      renderDetailComments(t);
+    }
+
+    function createNewTask() {
+      var newTask = {
+        id: 'task_' + Date.now(),
+        title: 'Nova Demanda ' + new Date().toLocaleDateString('pt-BR'),
+        owner: 'Eduardo Chiles',
+        bottleneck: '',
+        priority: 'media',
+        ref: '',
+        val: null,
+        stage: 'operacional',
+        due: '',
+        obs: '',
+        comments: []
+      };
+      tasks.push(newTask);
+      saveToStorage();
+      renderKanban();
+      openDetailModal(newTask.id);
     }
 
     function openAnjunModal() { document.getElementById('modal-anjun').style.display = 'flex'; }
@@ -957,112 +1195,30 @@
     function openPasteModal() { document.getElementById('modal-paste').style.display = 'flex'; }
     function closePasteModal() { document.getElementById('modal-paste').style.display = 'none'; }
 
-    document.getElementById('task-file').addEventListener('change', function(e) {
-      var file = e.target.files[0];
-      if (file) {
-        if (file.size > 2.5 * 1024 * 1024) {
-          alert('Recomendamos arquivos de até 2.5MB para não sobrecarregar a memória do navegador.');
-        }
-        var reader = new FileReader();
-        reader.onload = function(evt) {
-          currentAttachmentBase64 = evt.target.result;
-          currentAttachmentName = file.name;
-          document.getElementById('file-current-info').innerText = 'Novo anexo selecionado: ' + file.name;
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
-    function saveTask() {
-      var editId = document.getElementById('edit-task-id').value;
-      var title = document.getElementById('task-title').value.trim();
-      var owner = document.getElementById('task-owner').value.trim();
-      var bottleneck = document.getElementById('task-bottleneck').value.trim();
-      var priority = document.getElementById('task-priority').value;
-      var ref = document.getElementById('task-ref').value.trim();
-      var val = document.getElementById('task-val').value;
-      var stage = document.getElementById('task-stage').value;
-      var due = document.getElementById('task-due').value;
-      var obs = document.getElementById('task-obs').value.trim();
-
-      if (!title) return alert('Por favor, informe a descrição da tarefa.');
-
-      var attachmentObj = currentAttachmentBase64 ? {
-        name: currentAttachmentName,
-        data: currentAttachmentBase64
-      } : null;
-
-      if (editId) {
-        var t = tasks.find(function(x) { return x.id === editId; });
-        if (t) {
-          t.title = title;
-          t.owner = owner;
-          t.bottleneck = bottleneck;
-          t.priority = priority;
-          t.ref = ref;
-          t.val = val ? parseFloat(val) : null;
-          t.stage = stage;
-          t.due = due;
-          t.obs = obs;
-          if (attachmentObj) t.attachment = attachmentObj;
-        }
-      } else {
-        tasks.push({
-          id: 'task_' + Date.now(),
-          title: title,
-          owner: owner,
-          bottleneck: bottleneck,
-          priority: priority,
-          ref: ref,
-          val: val ? parseFloat(val) : null,
-          stage: stage,
-          due: due,
-          obs: obs,
-          attachment: attachmentObj
-        });
-      }
-
-      saveToStorage();
-      closeModal();
-      document.getElementById('task-title').value = '';
-      document.getElementById('task-owner').value = '';
-      document.getElementById('task-bottleneck').value = '';
-      document.getElementById('task-ref').value = '';
-      document.getElementById('task-val').value = '';
-      document.getElementById('task-due').value = '';
-      document.getElementById('task-obs').value = '';
-      renderKanban();
-    }
-
     function saveManualAnjun() {
       var filial = document.getElementById('anjun-filial-input').value.trim() || 'Anjun Geral';
       var quinzena = document.getElementById('anjun-quinzena-input').value.trim() || 'Quinzena Vigente';
-      var owner = document.getElementById('anjun-owner-input').value.trim();
-      var bottleneck = document.getElementById('anjun-bottleneck-input').value.trim();
-      var priority = document.getElementById('anjun-priority-input').value;
       var valor = document.getElementById('anjun-valor-input').value;
-      var due = document.getElementById('anjun-due-input').value;
 
       tasks.push({
         id: 'anjun_' + Date.now(),
         title: 'Emissão CT-e: ' + filial + ' (' + quinzena + ')',
-        owner: owner,
-        bottleneck: bottleneck,
-        priority: priority,
+        owner: 'Eduardo Chiles',
+        bottleneck: 'Aguardando retorno financeiro para emissão do CTE',
+        priority: 'alta',
         ref: filial + ' - ' + quinzena,
         val: valor ? parseFloat(valor) : null,
         stage: 'financeiro',
-        due: due || null,
-        obs: ''
+        due: null,
+        obs: '',
+        comments: []
       });
 
       saveToStorage();
       closeAnjunModal();
       document.getElementById('anjun-filial-input').value = '';
       document.getElementById('anjun-quinzena-input').value = '';
-      document.getElementById('anjun-owner-input').value = '';
       document.getElementById('anjun-valor-input').value = '';
-      document.getElementById('anjun-due-input').value = '';
       renderKanban();
     }
 
@@ -1095,7 +1251,8 @@
             val: isNaN(valorLimpo) ? null : valorLimpo,
             stage: 'financeiro',
             due: null,
-            obs: ''
+            obs: '',
+            comments: []
           });
           count++;
         }
@@ -1132,7 +1289,11 @@
       var days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
       days.forEach(function(d) {
         var el = document.createElement('div');
-        el.className = 'cal-header-day';
+        el.style.textAlign = 'center';
+        el.style.fontSize = '0.75rem';
+        el.style.fontWeight = '700';
+        el.style.color = 'var(--text-muted)';
+        el.style.padding = '8px 0';
         el.innerText = d;
         grid.appendChild(el);
       });
@@ -1151,14 +1312,28 @@
 
       for (var day = 1; day <= totalDays; day++) {
         var cell = document.createElement('div');
-        cell.className = 'cal-day';
+        cell.style.background = 'var(--bg-card)';
+        cell.style.border = '1px solid var(--border)';
+        cell.style.minHeight = '90px';
+        cell.style.padding = '6px';
+        cell.style.borderRadius = '4px';
+        cell.style.fontSize = '0.75rem';
+        
         var isToday = day === now.getDate();
-        cell.innerHTML = '<div class="cal-day-num ' + (isToday ? 'today' : '') + '">' + day + '</div>';
+        cell.innerHTML = '<div style="font-weight:700; color:' + (isToday ? 'var(--accent-amber)' : '#64748b') + '; margin-bottom:4px;">' + day + '</div>';
 
         var dayStr = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
         tasks.filter(function(t) { return t.due && t.due.indexOf(dayStr) === 0; }).forEach(function(t) {
           var item = document.createElement('div');
-          item.className = 'cal-task-item';
+          item.style.background = '#1e293b';
+          item.style.borderLeft = '2px solid var(--accent-cyan)';
+          item.style.padding = '2px 4px';
+          item.style.marginBottom = '3px';
+          item.style.borderRadius = '2px';
+          item.style.fontSize = '0.7rem';
+          item.style.whiteSpace = 'nowrap';
+          item.style.overflow = 'hidden';
+          item.style.textOverflow = 'ellipsis';
           item.innerText = t.title;
           cell.appendChild(item);
         });
