@@ -34,188 +34,232 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow: hidden;
     }
 
     header {
-      background-color: #050811;
+      background: #0b1324;
       border-bottom: 1px solid var(--border);
-      padding: 12px 24px;
+      padding: 10px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 12px;
-      position: sticky;
-      top: 0;
-      z-index: 50;
+      gap: 10px;
     }
 
     .brand {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: var(--accent-cyan);
-      letter-spacing: 0.5px;
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
-    .brand span {
-      background: #1e293b;
+    .brand h1 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: var(--accent-cyan);
+    }
+
+    .brand .badge {
+      background: #f59e0b22;
       color: var(--accent-amber);
-      font-size: 0.75rem;
-      padding: 2px 8px;
-      border-radius: 4px;
-      border: 1px solid var(--border-accent);
+      border: 1px solid #f59e0b55;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
     }
 
     .header-actions {
       display: flex;
-      gap: 8px;
       align-items: center;
+      gap: 8px;
       flex-wrap: wrap;
     }
 
-    button {
-      cursor: pointer;
-      border: none;
-      border-radius: 6px;
-      padding: 8px 14px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      transition: all 0.2s ease;
+    .view-switch {
+      display: flex;
+      background: #070d18;
+      padding: 3px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
     }
 
-    button:hover { opacity: 0.88; }
-
-    .btn-primary { background: var(--accent-blue); color: #fff; }
-    .btn-purple { background: var(--accent-purple); color: #fff; }
-    .btn-outline {
+    .view-btn {
       background: transparent;
-      border: 1px solid var(--border-accent);
+      border: none;
       color: var(--text-muted);
-    }
-    .btn-outline.active {
-      background: #1e293b;
-      color: #fff;
-      border-color: var(--accent-cyan);
-    }
-    .btn-action {
-      background: #1e293b;
-      border: 1px solid var(--border-accent);
-      color: var(--text-muted);
-      font-size: 0.75rem;
-      padding: 6px 10px;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      font-weight: 600;
     }
 
-    main {
-      padding: 18px 24px;
-      flex: 1;
+    .view-btn.active {
+      background: var(--bg-card);
+      color: var(--text);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.4);
     }
+
+    .btn {
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+
+    .btn-primary {
+      background: var(--accent-blue);
+      color: white;
+    }
+    .btn-primary:hover { background: #0369a1; }
+
+    .btn-purple {
+      background: var(--accent-purple);
+      color: white;
+    }
+    .btn-purple:hover { background: #7c3aed; }
+
+    .btn-secondary {
+      background: #1e293b;
+      color: var(--text);
+      border-color: var(--border-accent);
+    }
+    .btn-secondary:hover { background: #334155; }
 
     /* DASHBOARD KPIS */
-    .dashboard-kpis {
+    .dashboard {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 14px;
-      margin-bottom: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      padding: 12px 20px 4px 20px;
     }
 
     .kpi-card {
-      background: var(--bg-card);
+      background: #0f172a88;
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 14px;
+      padding: 10px 14px;
       display: flex;
       flex-direction: column;
       gap: 4px;
-      cursor: pointer;
-      transition: border-color 0.2s;
     }
 
-    .kpi-card:hover { border-color: var(--accent-cyan); }
-    .kpi-card .kpi-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; }
-    .kpi-card .kpi-val { font-size: 1.4rem; font-weight: 800; font-family: monospace; }
-    .kpi-card.kpi-blue .kpi-val { color: var(--accent-cyan); }
-    .kpi-card.kpi-green .kpi-val { color: var(--accent-green); }
-    .kpi-card.kpi-red .kpi-val { color: var(--accent-red); }
-    .kpi-card.kpi-purple .kpi-val { color: var(--accent-purple); }
+    .kpi-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .kpi-value {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .kpi-val-blue { color: var(--accent-cyan); }
+    .kpi-val-green { color: var(--accent-green); }
+    .kpi-val-red { color: var(--accent-red); }
+    .kpi-val-purple { color: #c084fc; }
 
     /* FILTROS */
     .filter-bar {
-      margin-bottom: 18px;
+      padding: 8px 20px;
       display: flex;
       gap: 10px;
+      align-items: center;
       flex-wrap: wrap;
     }
 
-    .filter-bar input, .filter-bar select {
+    .filter-input, .filter-select {
       background: var(--bg-card);
       border: 1px solid var(--border);
       color: var(--text);
-      padding: 8px 12px;
+      padding: 6px 10px;
       border-radius: 6px;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       outline: none;
     }
-    .filter-bar input:focus, .filter-bar select:focus { border-color: var(--accent-cyan); }
 
-    /* KANBAN */
-    .kanban-board {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    .filter-input { min-width: 220px; }
+    .filter-input:focus, .filter-select:focus { border-color: var(--accent-blue); }
+
+    /* KANBAN BOARD */
+    .board-container {
+      flex: 1;
+      padding: 8px 20px 16px 20px;
+      display: flex;
       gap: 14px;
-      align-items: start;
+      overflow-x: auto;
+      overflow-y: hidden;
     }
 
-    .kanban-col {
-      background: #090f1d;
+    .column {
+      background: #0b132488;
       border: 1px solid var(--border);
       border-radius: 8px;
-      height: calc(100vh - 280px);
-      min-height: 480px;
+      flex: 0 0 310px;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
+      max-height: 100%;
+      height: 100%;
     }
 
-    .col-header {
+    .column-header {
       padding: 12px 14px;
-      background: #0d1527;
-      border-bottom: 1px solid var(--border);
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: #cbd5e1;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      border-bottom: 1px solid var(--border);
+      background: #0b1324;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
       position: sticky;
       top: 0;
-      z-index: 10;
+      z-index: 2;
     }
 
-    .col-header .counter {
+    .column-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .column-count {
       background: #1e293b;
-      color: #94a3b8;
-      padding: 2px 7px;
-      border-radius: 10px;
-      font-size: 0.75rem;
-      font-family: monospace;
+      color: var(--text-muted);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.72rem;
+      font-weight: 700;
     }
 
-    .col-tasks {
-      padding: 12px;
+    .task-list {
+      padding: 10px;
       flex: 1;
+      overflow-y: auto;
       display: flex;
       flex-direction: column;
       gap: 10px;
-      overflow-y: auto;
-      scrollbar-width: thin;
-      scrollbar-color: #334155 transparent;
+      min-height: 100px;
     }
 
-    .col-tasks::-webkit-scrollbar { width: 6px; }
-    .col-tasks::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    .task-list.dragover {
+      background: #1e293b33;
+      border: 1px dashed var(--accent-blue);
+      border-radius: 6px;
+    }
 
     /* CARD ESTILIZADO */
     .card {
@@ -223,319 +267,293 @@
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 12px;
-      cursor: pointer;
-      transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+      cursor: grab;
+      position: relative;
+      transition: all 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.25);
     }
+
     .card:hover {
+      border-color: var(--border-accent);
       background: var(--bg-card-hover);
-      border-color: var(--accent-cyan);
-      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.15);
+      transform: translateY(-1px);
     }
-    .card.card-overdue { border-left: 4px solid var(--accent-red); }
-    .card.card-cte { border-left: 4px solid var(--accent-purple); }
+
+    .card.dragging {
+      opacity: 0.4;
+    }
 
     .card-top {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      margin-bottom: 6px;
-      flex-wrap: wrap;
-      gap: 4px;
-    }
-
-    .badges-group {
-      display: flex;
-      gap: 4px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .badge {
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 0.65rem;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-    .badge-operacional { background: #0369a1; color: #fff; }
-    .badge-atendimento { background: #059669; color: #fff; }
-    .badge-comercial { background: #d97706; color: #fff; }
-    .badge-financeiro { background: #7c3aed; color: #fff; }
-    .badge-concluido { background: #334155; color: #cbd5e1; }
-    .badge-atrasado { background: var(--accent-red); color: #fff; }
-    .badge-ontime { background: #065f46; color: #34d399; }
-
-    .badge-prioridade-critica { background: #ef4444; color: #fff; }
-    .badge-prioridade-alta { background: #ea580c; color: #fff; }
-    .badge-prioridade-media { background: #ca8a04; color: #fff; }
-    .badge-prioridade-baixa { background: #0284c7; color: #fff; }
-    .badge-prioridade-sem { background: #475569; color: #cbd5e1; }
-
-    .card-title {
-      font-size: 0.92rem;
-      font-weight: 700;
-      color: #f8fafc;
-      margin-bottom: 6px;
-    }
-
-    .card-meta {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      line-height: 1.5;
-      margin-bottom: 8px;
-    }
-    .card-meta strong { color: #cbd5e1; }
-
-    .meta-dono { color: #38bdf8 !important; }
-    .meta-parado {
-      color: #f59e0b !important;
-      background: rgba(245, 158, 11, 0.1);
-      padding: 2px 4px;
-      border-radius: 3px;
-      display: inline-block;
-      margin-top: 2px;
-    }
-
-    .meta-obs {
-      background: #0b1322;
-      border-left: 2px solid #38bdf8;
-      padding: 4px 6px;
-      border-radius: 2px;
-      margin-top: 4px;
-      font-size: 0.72rem;
-      color: #cbd5e1;
-      white-space: pre-wrap;
-    }
-
-    .card-comments-count {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 0.7rem;
-      color: #94a3b8;
-      background: #1e293b;
-      padding: 2px 6px;
-      border-radius: 4px;
-      margin-top: 5px;
-    }
-
-    .card-actions {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-top: 1px solid #1e293b;
-      padding-top: 8px;
-      margin-top: 6px;
+      align-items: flex-start;
       gap: 6px;
     }
 
-    .card-del {
-      background: transparent;
-      color: #ef4444;
-      font-size: 0.75rem;
+    .priority-badge {
+      font-size: 0.65rem;
+      font-weight: 800;
+      text-transform: uppercase;
       padding: 2px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.4px;
     }
 
-    /* MODAL DE DETALHES ESTILO SEGUNDA IMAGEM */
-    .modal-backdrop {
-      display: none;
+    .p-critica { background: #ef444433; color: #f87171; border: 1px solid #ef444466; }
+    .p-alta { background: #f9731633; color: #fb923c; border: 1px solid #f9731666; }
+    .p-media { background: #f59e0b33; color: #fbbf24; border: 1px solid #f59e0b66; }
+    .p-baixa { background: #10b98133; color: #34d399; border: 1px solid #10b98166; }
+    .p-semurgencia { background: #64748b33; color: #94a3b8; border: 1px solid #64748b66; }
+
+    .card-ref {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      background: #0284c722;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .card-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      line-height: 1.3;
+      color: #f8fafc;
+    }
+
+    .card-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .card-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .card-meta-row b {
+      color: var(--text);
+    }
+
+    .card-price {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #c084fc;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 6px;
+      border-top: 1px solid #1e293b88;
+      font-size: 0.7rem;
+    }
+
+    .deadline-badge {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .dl-ok { color: var(--accent-green); background: #10b98115; }
+    .dl-near { color: var(--accent-amber); background: #f59e0b20; }
+    .dl-late { color: var(--accent-red); background: #ef444425; font-weight: 700; }
+
+    .card-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+    }
+
+    /* MODAL */
+    .modal-overlay {
       position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.8);
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(3px);
+      display: none;
       justify-content: center;
       align-items: center;
-      z-index: 999;
+      z-index: 100;
     }
 
-    .card-detail-box {
-      background: #0d1527;
+    .modal {
+      background: #0f172a;
       border: 1px solid var(--border-accent);
       border-radius: 10px;
       width: 95%;
-      max-width: 980px;
-      height: 90vh;
-      max-height: 850px;
+      max-width: 650px;
+      max-height: 90vh;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
     }
 
-    .detail-header {
-      background: #080d18;
-      padding: 14px 20px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .detail-title {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--accent-amber);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .detail-body {
-      flex: 1;
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      overflow: hidden;
-    }
-
-    @media (max-width: 800px) {
-      .detail-body { grid-template-columns: 1fr; overflow-y: auto; }
-    }
-
-    /* COLUNA ESQUERDA: DADOS */
-    .detail-left {
-      padding: 20px;
-      border-right: 1px solid var(--border);
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .field-group {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-
-    .field-group label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: #64748b;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .field-input, .field-select, .field-textarea {
-      background: #070d18;
-      border: 1px solid var(--border-accent);
-      color: var(--text);
-      padding: 8px 10px;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      outline: none;
-    }
-
-    .field-input:focus, .field-select:focus, .field-textarea:focus {
-      border-color: var(--accent-cyan);
-    }
-
-    /* COLUNA DIREITA: FEED DE CONVERSA */
-    .detail-right {
-      background: #0a1120;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .feed-header {
+    .modal-header {
       padding: 14px 18px;
       border-bottom: 1px solid var(--border);
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: #cbd5e1;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
     }
 
-    .feed-list {
-      flex: 1;
-      padding: 16px;
+    .modal-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .modal-body {
+      padding: 16px 18px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
 
-    .comment-bubble {
-      background: #152238;
-      border: 1px solid #1e293b;
-      border-radius: 8px;
-      padding: 10px 12px;
+    .form-group {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 5px;
     }
 
-    .comment-top {
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .form-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .form-control {
+      background: #070d18;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      outline: none;
+    }
+
+    .form-control:focus { border-color: var(--accent-blue); }
+
+    .modal-footer {
+      padding: 12px 18px;
+      border-top: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.72rem;
     }
 
-    .comment-author {
-      font-weight: 700;
-      color: var(--accent-amber);
-    }
-
-    .comment-time {
-      color: #64748b;
-    }
-
-    .comment-text {
-      font-size: 0.82rem;
-      color: #e2e8f0;
-      white-space: pre-wrap;
-      line-height: 1.4;
-    }
-
-    .feed-input-box {
-      padding: 12px 16px;
+    /* FEED DE COMENTÁRIOS */
+    .comments-section {
       border-top: 1px solid var(--border);
-      background: #080e1b;
+      padding-top: 12px;
       display: flex;
       flex-direction: column;
       gap: 8px;
     }
 
-    .feed-input-box textarea {
+    .comments-list {
+      max-height: 150px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
       background: #070d18;
-      border: 1px solid var(--border-accent);
-      color: #f1f5f9;
       padding: 8px;
       border-radius: 6px;
-      font-size: 0.82rem;
-      resize: none;
-      outline: none;
+      border: 1px solid var(--border);
     }
 
-    .feed-input-box textarea:focus {
-      border-color: var(--accent-cyan);
-    }
-
-    .btn-anexo {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      background: #1e293b;
-      color: #38bdf8;
-      border: 1px solid #334155;
-      padding: 4px 10px;
-      border-radius: 4px;
+    .comment-item {
       font-size: 0.75rem;
-      text-decoration: none;
+      border-bottom: 1px solid #1e293b66;
+      padding-bottom: 4px;
     }
 
-    .alarm-banner {
+    .comment-item:last-child { border-bottom: none; }
+    .comment-time { font-size: 0.65rem; color: var(--text-muted); }
+
+    /* CALENDÁRIO */
+    #calendarView {
       display: none;
-      position: fixed;
-      bottom: 24px; right: 24px;
-      background: #7f1d1d;
-      border: 1px solid #ef4444;
-      color: #fff;
-      padding: 14px 18px;
+      flex: 1;
+      padding: 16px 20px;
+      overflow-y: auto;
+    }
+
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+    }
+
+    .cal-header-day {
+      text-align: center;
+      font-weight: 700;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      padding: 6px;
+    }
+
+    .cal-day-cell {
+      background: #0b1324;
+      border: 1px solid var(--border);
       border-radius: 6px;
-      z-index: 1000;
+      min-height: 90px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .cal-day-num {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .cal-item {
+      font-size: 0.65rem;
+      padding: 2px 4px;
+      border-radius: 3px;
+      background: #1e293b;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -543,833 +561,706 @@
 
   <header>
     <div class="brand">
-      KANBAN <span>EDUARDO CHILES</span>
+      <h1>KANBAN</h1>
+      <span class="badge">Eduardo Chiles</span>
     </div>
+
     <div class="header-actions">
-      <button class="btn-outline active" id="btn-tab-kanban" onclick="switchView('kanban')">Kanban</button>
-      <button class="btn-outline" id="btn-tab-cal" onclick="switchView('calendar')">Calendário</button>
-      <button class="btn-action" onclick="openPasteModal()">📋 Colar da Planilha</button>
-      <button class="btn-purple" onclick="openAnjunModal()">+ Lançar Pendência Financeiro</button>
-      <button class="btn-primary" onclick="createNewTask()">+ Nova Demanda</button>
-      <button class="btn-action" onclick="exportData()">Backup</button>
-      <button class="btn-action" onclick="document.getElementById('import-file').click()">Restaurar</button>
-      <input type="file" id="import-file" style="display:none;" onchange="importData(event)">
+      <div class="view-switch">
+        <button class="view-btn active" id="btnViewKanban" onclick="switchView('kanban')">Kanban</button>
+        <button class="view-btn" id="btnViewCalendar" onclick="switchView('calendar')">Calendário</button>
+      </div>
+
+      <button class="btn btn-secondary" onclick="openImportModal()">📋 Colar da Planilha</button>
+      <button class="btn btn-purple" onclick="openModal('Financeiro')">+ Lançar Pendência Financeiro</button>
+      <button class="btn btn-primary" onclick="openModal('Operacional')">+ Nova Demanda</button>
+      <button class="btn btn-secondary" onclick="exportBackup()">Backup</button>
+      <button class="btn btn-secondary" onclick="document.getElementById('restoreFileInput').click()">Restaurar</button>
+      <input type="file" id="restoreFileInput" style="display:none" onchange="importBackup(event)" accept=".json">
     </div>
   </header>
 
-  <main>
-    <div class="dashboard-kpis">
-      <div class="kpi-card kpi-blue" onclick="setQuickFilter('todas')">
-        <span class="kpi-label">TOTAL EM ABERTO</span>
-        <span class="kpi-val" id="kpi-aberto">0</span>
+  <!-- DASHBOARD KPIS -->
+  <div class="dashboard">
+    <div class="kpi-card">
+      <span class="kpi-title">Total em Aberto</span>
+      <span class="kpi-value kpi-val-blue" id="kpiOpen">0</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-title">Dentro do Prazo</span>
+      <span class="kpi-value kpi-val-green" id="kpiOnTime">0</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-title">Fora do Prazo (Atrasadas)</span>
+      <span class="kpi-value kpi-val-red" id="kpiLate">0</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-title">Total Pendências Financeiro</span>
+      <span class="kpi-value kpi-val-purple" id="kpiFinanceTotal">R$ 0,00</span>
+    </div>
+  </div>
+
+  <!-- FILTROS -->
+  <div class="filter-bar">
+    <input type="text" id="searchFilter" class="filter-input" placeholder="Filtrar por dono, problema, placa..." oninput="renderKanban()">
+    <select id="priorityFilter" class="filter-select" onchange="renderKanban()">
+      <option value="">Todas as Prioridades</option>
+      <option value="critica">Crítica</option>
+      <option value="alta">Alta</option>
+      <option value="media">Média</option>
+      <option value="baixa">Baixa</option>
+      <option value="semurgencia">Sem Urgência</option>
+    </select>
+    <select id="deadlineFilter" class="filter-select" onchange="renderKanban()">
+      <option value="">Status de Prazo (Todos)</option>
+      <option value="atrasado">Apenas Atrasadas</option>
+      <option value="alerta">Próximas do Prazo (≤24h)</option>
+      <option value="noprazo">No Prazo</option>
+    </select>
+    <select id="stageFilter" class="filter-select" onchange="renderKanban()">
+      <option value="">Todas as Etapas</option>
+      <option value="Operacional">Operacional</option>
+      <option value="Atendimento">Atendimento</option>
+      <option value="Comercial">Comercial</option>
+      <option value="Financeiro">Financeiro</option>
+      <option value="Concluído">Concluído</option>
+    </select>
+  </div>
+
+  <!-- VISÃO KANBAN -->
+  <main class="board-container" id="kanbanBoard">
+    <div class="column" data-stage="Operacional">
+      <div class="column-header">
+        <span class="column-title">Operacional</span>
+        <span class="column-count" id="count-Operacional">0</span>
       </div>
-      <div class="kpi-card kpi-green" onclick="setQuickFilter('prazo')">
-        <span class="kpi-label">DENTRO DO PRAZO</span>
-        <span class="kpi-val" id="kpi-prazo">0</span>
-      </div>
-      <div class="kpi-card kpi-red" onclick="setQuickFilter('atrasadas')">
-        <span class="kpi-label">FORA DO PRAZO (ATRASADAS)</span>
-        <span class="kpi-val" id="kpi-atrasadas">0</span>
-      </div>
-      <div class="kpi-card kpi-purple" onclick="setQuickFilter('cte')">
-        <span class="kpi-label">TOTAL PENDÊNCIAS FINANCEIRO</span>
-        <span class="kpi-val" id="kpi-cte">R$ 0,00</span>
-      </div>
+      <div class="task-list" id="list-Operacional" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'Operacional')"></div>
     </div>
 
-    <div class="filter-bar">
-      <input type="text" id="filtro-busca" placeholder="Filtrar por dono, problema, observação, comentário, filial..." oninput="renderKanban()">
-      <select id="filtro-prioridade" onchange="renderKanban()">
-        <option value="">Todas as Prioridades</option>
-        <option value="critica">Crítica</option>
-        <option value="alta">Alta</option>
-        <option value="media">Média</option>
-        <option value="baixa">Baixa</option>
-        <option value="sem">Sem urgência</option>
-      </select>
-      <select id="filtro-status-prazo" onchange="renderKanban()">
-        <option value="">Status de Prazo (Todos)</option>
-        <option value="atrasado">Apenas Fora do Prazo (Atrasadas)</option>
-        <option value="noprazo">Apenas Dentro do Prazo</option>
-      </select>
-      <select id="filtro-setor" onchange="renderKanban()">
-        <option value="">Todas as Etapas</option>
-        <option value="operacional">Operacional</option>
-        <option value="atendimento">Atendimento</option>
-        <option value="comercial">Comercial</option>
-        <option value="financeiro">Financeiro</option>
-        <option value="concluido">Concluído</option>
-      </select>
+    <div class="column" data-stage="Atendimento">
+      <div class="column-header">
+        <span class="column-title">Atendimento</span>
+        <span class="column-count" id="count-Atendimento">0</span>
+      </div>
+      <div class="task-list" id="list-Atendimento" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'Atendimento')"></div>
     </div>
 
-    <div id="view-kanban" class="kanban-board">
-      <div class="kanban-col" ondragover="allowDrop(event)" ondrop="drop(event, 'operacional')">
-        <div class="col-header">Operacional <span class="counter" id="count-operacional">0</span></div>
-        <div class="col-tasks" id="col-operacional"></div>
+    <div class="column" data-stage="Comercial">
+      <div class="column-header">
+        <span class="column-title">Comercial</span>
+        <span class="column-count" id="count-Comercial">0</span>
       </div>
-      <div class="kanban-col" ondragover="allowDrop(event)" ondrop="drop(event, 'atendimento')">
-        <div class="col-header">Atendimento <span class="counter" id="count-atendimento">0</span></div>
-        <div class="col-tasks" id="col-atendimento"></div>
-      </div>
-      <div class="kanban-col" ondragover="allowDrop(event)" ondrop="drop(event, 'comercial')">
-        <div class="col-header">Comercial <span class="counter" id="count-comercial">0</span></div>
-        <div class="col-tasks" id="col-comercial"></div>
-      </div>
-      <div class="kanban-col" ondragover="allowDrop(event)" ondrop="drop(event, 'financeiro')">
-        <div class="col-header">Financeiro <span class="counter" id="count-financeiro">0</span></div>
-        <div class="col-tasks" id="col-financeiro"></div>
-      </div>
-      <div class="kanban-col" ondragover="allowDrop(event)" ondrop="drop(event, 'concluido')">
-        <div class="col-header">Concluído <span class="counter" id="count-concluido">0</span></div>
-        <div class="col-tasks" id="col-concluido"></div>
-      </div>
+      <div class="task-list" id="list-Comercial" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'Comercial')"></div>
     </div>
 
-    <div id="view-calendar" class="calendar-view" style="display:none; background:#090f1d; border:1px solid var(--border); border-radius:8px; padding:20px;">
-      <div style="font-weight:700; color:var(--accent-cyan);" id="calendar-month-title">Mês Vigente</div>
-      <div class="calendar-grid" id="calendar-grid" style="display:grid; grid-template-columns:repeat(7, 1fr); gap:6px; margin-top:14px;"></div>
+    <div class="column" data-stage="Financeiro">
+      <div class="column-header">
+        <span class="column-title">Financeiro</span>
+        <span class="column-count" id="count-Financeiro">0</span>
+      </div>
+      <div class="task-list" id="list-Financeiro" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'Financeiro')"></div>
+    </div>
+
+    <div class="column" data-stage="Concluído">
+      <div class="column-header">
+        <span class="column-title">Concluído</span>
+        <span class="column-count" id="count-Concluído">0</span>
+      </div>
+      <div class="task-list" id="list-Concluído" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'Concluído')"></div>
     </div>
   </main>
 
-  <!-- MODAL DE DETALHES COMPLETO (ESTILO SEGUNDA IMAGEM) -->
-  <div class="modal-backdrop" id="modal-detail">
-    <div class="card-detail-box">
-      <div class="detail-header">
-        <div class="detail-title" id="detail-card-title">Título da Demanda</div>
-        <button class="btn-outline" style="border:none; font-size:1.1rem; color:#94a3b8;" onclick="closeDetailModal()">✕</button>
+  <!-- VISÃO CALENDÁRIO -->
+  <div id="calendarView">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <h2 id="calendarMonthYear" style="font-size:1rem; font-weight:700;"></h2>
+      <div>
+        <button class="btn btn-secondary" onclick="changeMonth(-1)">◀ Anterior</button>
+        <button class="btn btn-secondary" onclick="changeMonth(1)">Próximo ▶</button>
       </div>
+    </div>
+    <div class="cal-grid" id="calendarDaysGrid"></div>
+  </div>
 
-      <div class="detail-body">
-        <!-- COLUNA ESQUERDA: DADOS -->
-        <div class="detail-left">
-          <input type="hidden" id="detail-task-id">
-          
-          <div class="field-group">
-            <label>Título / Descrição</label>
-            <input type="text" id="detail-title-input" class="field-input" onchange="autoSaveCurrentTask()">
+  <!-- MODAL DE CARD (CRIAR/EDITAR) -->
+  <div class="modal-overlay" id="taskModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalTitleText">Editar Demanda</h3>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="taskId">
+        
+        <div class="form-group">
+          <label class="form-label">Título da Demanda / Assunto *</label>
+          <input type="text" id="taskTitle" class="form-control" placeholder="Ex: Autorização de Frete Extra...">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Setor / Etapa</label>
+            <select id="taskStage" class="form-control">
+              <option value="Operacional">Operacional</option>
+              <option value="Atendimento">Atendimento</option>
+              <option value="Comercial">Comercial</option>
+              <option value="Financeiro">Financeiro</option>
+              <option value="Concluído">Concluído</option>
+            </select>
           </div>
-
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-            <div class="field-group">
-              <label>Etapa / Setor</label>
-              <select id="detail-stage-input" class="field-select" onchange="autoSaveCurrentTask()">
-                <option value="operacional">Operacional</option>
-                <option value="atendimento">Atendimento</option>
-                <option value="comercial">Comercial</option>
-                <option value="financeiro">Financeiro</option>
-                <option value="concluido">Concluído</option>
-              </select>
-            </div>
-
-            <div class="field-group">
-              <label>Prioridade</label>
-              <select id="detail-priority-input" class="field-select" onchange="autoSaveCurrentTask()">
-                <option value="critica">Crítica</option>
-                <option value="alta">Alta</option>
-                <option value="media">Média</option>
-                <option value="baixa">Baixa</option>
-                <option value="sem">Sem urgência</option>
-              </select>
-            </div>
-          </div>
-
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-            <div class="field-group">
-              <label>Dono do Assunto</label>
-              <input type="text" id="detail-owner-input" class="field-input" placeholder="Ex: Eduardo Chiles" onchange="autoSaveCurrentTask()">
-            </div>
-            <div class="field-group">
-              <label>Referência (Placa / Filial)</label>
-              <input type="text" id="detail-ref-input" class="field-input" placeholder="Ex: Anjun MT" onchange="autoSaveCurrentTask()">
-            </div>
-          </div>
-
-          <div class="field-group">
-            <label>Onde o problema está parado?</label>
-            <input type="text" id="detail-bottleneck-input" class="field-input" placeholder="Ex: Aguardando negociação..." onchange="autoSaveCurrentTask()">
-          </div>
-
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-            <div class="field-group">
-              <label>Valor Envolvido (R$)</label>
-              <input type="number" step="0.01" id="detail-val-input" class="field-input" placeholder="0.00" onchange="autoSaveCurrentTask()">
-            </div>
-            <div class="field-group">
-              <label>Prazo Limite</label>
-              <input type="datetime-local" id="detail-due-input" class="field-input" onchange="autoSaveCurrentTask()">
-            </div>
-          </div>
-
-          <div class="field-group">
-            <label>Descrição / Observações Gerais</label>
-            <textarea id="detail-obs-input" class="field-textarea" rows="4" placeholder="Insira o contexto detalhado da demanda..." onchange="autoSaveCurrentTask()"></textarea>
-          </div>
-
-          <div class="field-group">
-            <label>Anexos</label>
-            <div id="detail-attachment-wrapper" style="margin-bottom:6px;"></div>
-            <input type="file" id="detail-file-input" accept="image/*,.pdf,.xlsx,.xls,.csv,.doc,.docx">
+          <div class="form-group">
+            <label class="form-label">Prioridade</label>
+            <select id="taskPriority" class="form-control">
+              <option value="critica">🔴 Crítica</option>
+              <option value="alta">🟠 Alta</option>
+              <option value="media" selected>🟡 Média</option>
+              <option value="baixa">🟢 Baixa</option>
+              <option value="semurgencia">⚪ Sem Urgência</option>
+            </select>
           </div>
         </div>
 
-        <!-- COLUNA DIREITA: FEED DE CONVERSA -->
-        <div class="detail-right">
-          <div class="feed-header">
-            <span>Conversa do cartão</span>
-            <span id="detail-comments-badge" style="background:#1e293b; color:#38bdf8; font-size:0.75rem; padding:2px 8px; border-radius:10px;">0 mensagens</span>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Dono do Assunto (Responsável)</label>
+            <input type="text" id="taskOwner" class="form-control" placeholder="Ex: Eduardo Chiles">
           </div>
-
-          <div class="feed-list" id="detail-comments-list"></div>
-
-          <div class="feed-input-box">
-            <textarea id="new-comment-text" rows="3" placeholder="Escreva uma nova informação ou atualização..."></textarea>
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <input type="text" id="comment-author-input" placeholder="Seu nome" value="Eduardo Chiles" style="background:#070d18; border:1px solid var(--border-accent); color:#94a3b8; font-size:0.75rem; padding:5px 8px; border-radius:4px; width:140px;">
-              <button class="btn-primary" onclick="addCommentToCard()">Comentar</button>
-            </div>
+          <div class="form-group">
+            <label class="form-label">Onde o problema está parado?</label>
+            <input type="text" id="taskBottleneck" class="form-control" placeholder="Ex: Validação Diretoria">
           </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Referência (Placa / Filial / ID)</label>
+            <input type="text" id="taskRef" class="form-control" placeholder="Ex: ABC-1234 / SP">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Valor Envolvido (R$)</label>
+            <input type="text" id="taskValue" class="form-control" placeholder="0,00" oninput="formatCurrency(this)">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Prazo Limite (Data e Hora)</label>
+          <input type="datetime-local" id="taskDeadline" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Observações Detalhadas</label>
+          <textarea id="taskObs" class="form-control" rows="3" placeholder="Insira o contexto detalhado da ocorrência..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Anexo (Documento / Foto)</label>
+          <input type="file" id="taskAttachment" class="form-control" onchange="handleFileAttachment(event)">
+          <div id="attachmentPreview" style="font-size:0.75rem; margin-top:4px; color:var(--accent-cyan);"></div>
+        </div>
+
+        <!-- COMENTÁRIOS -->
+        <div class="comments-section" id="commentsSection">
+          <label class="form-label">Feed de Comentários / Histórico</label>
+          <div class="comments-list" id="commentsList"></div>
+          <div style="display:flex; gap:6px; margin-top:4px;">
+            <input type="text" id="newCommentText" class="form-control" placeholder="Escrever comentário rápido..." onkeydown="if(event.key==='Enter') addComment()">
+            <button class="btn btn-secondary" onclick="addComment()">Enviar</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btnDeleteTask" style="color:var(--accent-red);" onclick="deleteCurrentTask()">Excluir</button>
+        <div style="display:flex; gap:8px;">
+          <button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+          <button class="btn btn-primary" onclick="saveTaskModal()">Salvar Demanda</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- MODAL ANJUN FINANCEIRO -->
-  <div class="modal-backdrop" id="modal-anjun">
-    <div style="background:#0f172a; border:1px solid var(--border-accent); padding:22px; border-radius:8px; width:90%; max-width:500px;">
-      <h3 style="color:var(--accent-cyan); font-size:1.05rem; margin-bottom:14px;">Lançar Pendência Financeiro / CT-e</h3>
-      <div style="margin-bottom:12px;">
-        <label style="display:block; font-size:0.75rem; color:var(--text-muted); margin-bottom:4px; font-weight:600;">Filial / Cliente</label>
-        <input type="text" id="anjun-filial-input" class="field-input" style="width:100%;" placeholder="Ex: Anjun MT">
+  <!-- MODAL IMPORTAÇÃO PLANILHA -->
+  <div class="modal-overlay" id="importModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Colar Dados da Planilha (ANJUN / Excel)</h3>
+        <button class="modal-close" onclick="closeImportModal()">✕</button>
       </div>
-      <div style="margin-bottom:12px;">
-        <label style="display:block; font-size:0.75rem; color:var(--text-muted); margin-bottom:4px; font-weight:600;">Período / Quinzena</label>
-        <input type="text" id="anjun-quinzena-input" class="field-input" style="width:100%;" placeholder="Ex: 1ª Q Outubro">
+      <div class="modal-body">
+        <p style="font-size:0.75rem; color:var(--text-muted);">
+          Copie as linhas da planilha com as colunas separadas por tabulação:<br>
+          <b>Título | Responsável | Parado Em | Prioridade | Placa/Ref | Valor | Prazo</b>
+        </p>
+        <textarea id="importPasteArea" class="form-control" rows="8" placeholder="Cole aqui os dados diretamente da planilha..."></textarea>
       </div>
-      <div style="margin-bottom:12px;">
-        <label style="display:block; font-size:0.75rem; color:var(--text-muted); margin-bottom:4px; font-weight:600;">Valor Aproximado (R$)</label>
-        <input type="number" step="0.01" id="anjun-valor-input" class="field-input" style="width:100%;" placeholder="20900.00">
-      </div>
-      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:16px;">
-        <button class="btn-outline" onclick="closeAnjunModal()">Cancelar</button>
-        <button class="btn-purple" onclick="saveManualAnjun()">Salvar no Financeiro</button>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeImportModal()">Cancelar</button>
+        <button class="btn btn-primary" onclick="processImportedText()">Importar Linhas</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL COLAR DA PLANILHA -->
-  <div class="modal-backdrop" id="modal-paste">
-    <div style="background:#0f172a; border:1px solid var(--border-accent); padding:22px; border-radius:8px; width:90%; max-width:500px;">
-      <h3 style="color:var(--accent-cyan); font-size:1.05rem; margin-bottom:14px;">Colar Linhas da Planilha</h3>
-      <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px;">
-        Copie as linhas da folha e cole abaixo no formato:<br>
-        <strong>Filial [TAB] Período [TAB] Valor</strong>
-      </p>
-      <textarea id="paste-input" rows="7" class="field-textarea" style="width:100%;" placeholder="Cole aqui as linhas copiadas..."></textarea>
-      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px;">
-        <button class="btn-outline" onclick="closePasteModal()">Cancelar</button>
-        <button class="btn-primary" onclick="processPastedData()">Importar Linhas</button>
-      </div>
-    </div>
-  </div>
+  <!-- Áudio Alarme -->
+  <audio id="alertSound" preload="auto">
+    <source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg">
+  </audio>
 
-  <div class="alarm-banner" id="alarm-banner">
-    <strong id="alarm-text">Prazo Operacional Expirado!</strong>
-    <button class="btn-outline" style="color:#fff; border-color:#fff; margin-left:10px;" onclick="dismissAlarm()">Dispensar</button>
-  </div>
+  <!-- Bibliotecas do Firebase Realtime Database -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
   <script>
+    // Configuração oficial do projeto kanban-operacional
+    const firebaseConfig = {
+      apiKey: "AIzaSyAy2EZcuUL80eu5Ru_6Fk8d8L17CXgfkkM",
+      authDomain: "kanban-operacional.firebaseapp.com",
+      databaseURL: "https://kanban-operacional-default-rtdb.firebaseio.com",
+      projectId: "kanban-operacional",
+      storageBucket: "kanban-operacional.firebasestorage.app",
+      messagingSenderId: "82564071714",
+      appId: "1:82564071714:web:1fa30270efdf92ef4de57b"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const tasksRef = db.ref('tasks');
+
     var tasks = [];
-    try {
-      tasks = JSON.parse(localStorage.getItem('ops_tasks') || '[]');
-      if (!Array.isArray(tasks)) tasks = [];
-    } catch(e) {
-      tasks = [];
-    }
-
     var notifiedTasks = new Set();
+    var currentAttachmentBase64 = null;
+    var currentAttachmentName = null;
+    var currentCalDate = new Date();
 
-    tasks.forEach(function(t) {
-      if (t.stage === 'patio') t.stage = 'operacional';
-      else if (t.stage === 'transito') t.stage = 'atendimento';
-      else if (t.stage === 'fechamento') t.stage = 'financeiro';
-      else if (['operacional', 'atendimento', 'comercial', 'financeiro', 'concluido'].indexOf(t.stage) === -1) {
-        t.stage = 'operacional';
+    // Sincronização em Tempo Real (PC e Telemóvel)
+    tasksRef.on('value', function(snapshot) {
+      const data = snapshot.val();
+      tasks = data ? (Array.isArray(data) ? data : Object.values(data)) : [];
+      
+      tasks.forEach(function(t) {
+        if (!t.priority) t.priority = 'media';
+        if (!t.owner) t.owner = '';
+        if (!t.bottleneck) t.bottleneck = '';
+        if (!t.obs) t.obs = '';
+        if (!Array.isArray(t.comments)) t.comments = [];
+      });
+
+      renderKanban();
+      if (document.getElementById('calendarView').style.display === 'block') {
+        renderCalendar();
       }
-      if (!t.priority) t.priority = 'media';
-      if (!t.owner) t.owner = '';
-      if (!t.bottleneck) t.bottleneck = '';
-      if (!t.obs) t.obs = '';
-      if (!Array.isArray(t.comments)) t.comments = [];
     });
 
     function saveToStorage() {
-      try {
-        localStorage.setItem('ops_tasks', JSON.stringify(tasks));
-      } catch(e) {
-        alert('Atenção: Limite de armazenamento local atingido.');
-      }
-      updateDashboardKPIs();
+      tasksRef.set(tasks)
+        .then(function() {
+          updateDashboardKPIs();
+        })
+        .catch(function(err) {
+          console.error("Erro ao sincronizar com o Firebase:", err);
+        });
     }
 
-    function switchView(view) {
-      var kanban = document.getElementById('view-kanban');
-      var cal = document.getElementById('view-calendar');
-      var bKanban = document.getElementById('btn-tab-kanban');
-      var bCal = document.getElementById('btn-tab-cal');
+    function renderKanban() {
+      const stages = ['Operacional', 'Atendimento', 'Comercial', 'Financeiro', 'Concluído'];
+      const searchVal = document.getElementById('searchFilter').value.toLowerCase();
+      const priorityVal = document.getElementById('priorityFilter').value;
+      const deadlineVal = document.getElementById('deadlineFilter').value;
+      const stageVal = document.getElementById('stageFilter').value;
 
-      if (view === 'kanban') {
-        kanban.style.display = 'grid';
-        cal.style.display = 'none';
-        bKanban.classList.add('active');
-        bCal.classList.remove('active');
+      stages.forEach(function(s) {
+        document.getElementById('list-' + s).innerHTML = '';
+        document.getElementById('count-' + s).textContent = '0';
+      });
+
+      var stageCounts = { Operacional: 0, Atendimento: 0, Comercial: 0, Financeiro: 0, Concluído: 0 };
+      const now = new Date();
+
+      tasks.forEach(function(task) {
+        const matchesSearch = !searchVal || 
+          (task.title && task.title.toLowerCase().includes(searchVal)) ||
+          (task.owner && task.owner.toLowerCase().includes(searchVal)) ||
+          (task.bottleneck && task.bottleneck.toLowerCase().includes(searchVal)) ||
+          (task.ref && task.ref.toLowerCase().includes(searchVal));
+
+        const matchesPriority = !priorityVal || task.priority === priorityVal;
+        const matchesStage = !stageVal || task.stage === stageVal;
+
+        var matchesDeadline = true;
+        if (deadlineVal && task.deadline) {
+          const dDate = new Date(task.deadline);
+          const diffHours = (dDate - now) / (1000 * 60 * 60);
+          if (deadlineVal === 'atrasado') matchesDeadline = diffHours < 0;
+          if (deadlineVal === 'alerta') matchesDeadline = diffHours >= 0 && diffHours <= 24;
+          if (deadlineVal === 'noprazo') matchesDeadline = diffHours > 24;
+        }
+
+        if (matchesSearch && matchesPriority && matchesStage && matchesDeadline) {
+          if (stageCounts.hasOwnProperty(task.stage)) {
+            stageCounts[task.stage]++;
+            const el = createCardElement(task);
+            document.getElementById('list-' + task.stage).appendChild(el);
+          }
+        }
+      });
+
+      stages.forEach(function(s) {
+        document.getElementById('count-' + s).textContent = stageCounts[s];
+      });
+
+      updateDashboardKPIs();
+      checkDeadlines();
+    }
+
+    function createCardElement(task) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.draggable = true;
+      card.id = 'task-' + task.id;
+
+      card.ondragstart = function(e) {
+        card.classList.add('dragging');
+        e.dataTransfer.setData('text/plain', task.id);
+      };
+
+      card.ondragend = function() {
+        card.classList.remove('dragging');
+      };
+
+      card.onclick = function(e) {
+        if (!e.target.closest('.card-btn-action')) {
+          openModal(task.stage, task.id);
+        }
+      };
+
+      var priorityLabels = {
+        critica: 'Crítica',
+        alta: 'Alta',
+        media: 'Média',
+        baixa: 'Baixa',
+        semurgencia: 'Sem Urgência'
+      };
+
+      var deadlineHtml = '';
+      if (task.deadline) {
+        const dDate = new Date(task.deadline);
+        const diffHours = (dDate - new Date()) / (1000 * 60 * 60);
+        let badgeClass = 'dl-ok';
+        let label = dDate.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+        
+        if (diffHours < 0) {
+          badgeClass = 'dl-late';
+          label = 'Atrasado: ' + label;
+        } else if (diffHours <= 24) {
+          badgeClass = 'dl-near';
+          label = 'Urgente: ' + label;
+        }
+
+        deadlineHtml = '<div class="deadline-badge ' + badgeClass + '">⏱ ' + label + '</div>';
+      }
+
+      var priceHtml = task.val ? '<span class="card-price">R$ ' + task.val + '</span>' : '';
+      var refHtml = task.ref ? '<span class="card-ref">' + escapeHtml(task.ref) + '</span>' : '';
+      var attachIcon = task.attachment ? '<span>📎</span>' : '';
+      var commentsIcon = (task.comments && task.comments.length > 0) ? '<span>💬 ' + task.comments.length + '</span>' : '';
+
+      card.innerHTML = 
+        '<div class="card-top">' +
+          '<span class="priority-badge p-' + (task.priority || 'media') + '">' + (priorityLabels[task.priority] || 'Média') + '</span>' +
+          refHtml +
+        '</div>' +
+        '<div class="card-title">' + escapeHtml(task.title) + '</div>' +
+        '<div class="card-meta">' +
+          (task.owner ? '<div class="card-meta-row">👤 <b>Dono:</b> ' + escapeHtml(task.owner) + '</div>' : '') +
+          (task.bottleneck ? '<div class="card-meta-row">🚧 <b>Parado em:</b> ' + escapeHtml(task.bottleneck) + '</div>' : '') +
+          (priceHtml ? '<div class="card-meta-row">💰 ' + priceHtml + '</div>' : '') +
+        '</div>' +
+        '<div class="card-footer">' +
+          deadlineHtml +
+          '<div class="card-icons">' + attachIcon + commentsIcon + '</div>' +
+        '</div>';
+
+      return card;
+    }
+
+    function handleDragOver(e) {
+      e.preventDefault();
+      e.currentTarget.classList.add('dragover');
+    }
+
+    function handleDragLeave(e) {
+      e.currentTarget.classList.remove('dragover');
+    }
+
+    function handleDrop(e, newStage) {
+      e.preventDefault();
+      e.currentTarget.classList.remove('dragover');
+      const taskId = e.dataTransfer.getData('text/plain');
+      const task = tasks.find(function(t) { return String(t.id) === String(taskId); });
+      if (task && task.stage !== newStage) {
+        task.stage = newStage;
+        saveToStorage();
+      }
+    }
+
+    function updateDashboardKPIs() {
+      const now = new Date();
+      var openCount = 0;
+      var onTimeCount = 0;
+      var lateCount = 0;
+      var financeTotalNum = 0.0;
+
+      tasks.forEach(function(t) {
+        if (t.stage !== 'Concluído') {
+          openCount++;
+          if (t.deadline) {
+            const dDate = new Date(t.deadline);
+            if (dDate < now) {
+              lateCount++;
+            } else {
+              onTimeCount++;
+            }
+          } else {
+            onTimeCount++;
+          }
+        }
+
+        if (t.stage === 'Financeiro' && t.val) {
+          const cleanVal = parseFloat(t.val.replace(/\./g, '').replace(',', '.'));
+          if (!isNaN(cleanVal)) {
+            financeTotalNum += cleanVal;
+          }
+        }
+      });
+
+      document.getElementById('kpiOpen').textContent = openCount;
+      document.getElementById('kpiOnTime').textContent = onTimeCount;
+      document.getElementById('kpiLate').textContent = lateCount;
+      document.getElementById('kpiFinanceTotal').textContent = financeTotalNum.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function checkDeadlines() {
+      const now = new Date();
+      tasks.forEach(function(t) {
+        if (t.stage !== 'Concluído' && t.deadline) {
+          const dDate = new Date(t.deadline);
+          if (dDate < now && !notifiedTasks.has(t.id)) {
+            playAlertSound();
+            notifiedTasks.add(t.id);
+          }
+        }
+      });
+    }
+
+    function playAlertSound() {
+      const audio = document.getElementById('alertSound');
+      if (audio) {
+        audio.play().catch(function() {});
+      }
+    }
+
+    function openModal(defaultStage, taskId) {
+      currentAttachmentBase64 = null;
+      currentAttachmentName = null;
+      document.getElementById('taskAttachment').value = '';
+      document.getElementById('attachmentPreview').innerHTML = '';
+
+      if (taskId) {
+        const task = tasks.find(function(t) { return String(t.id) === String(taskId); });
+        document.getElementById('taskId').value = task.id;
+        document.getElementById('modalTitleText').textContent = 'Editar Demanda';
+        document.getElementById('taskTitle').value = task.title || '';
+        document.getElementById('taskStage').value = task.stage || defaultStage;
+        document.getElementById('taskPriority').value = task.priority || 'media';
+        document.getElementById('taskOwner').value = task.owner || '';
+        document.getElementById('taskBottleneck').value = task.bottleneck || '';
+        document.getElementById('taskRef').value = task.ref || '';
+        document.getElementById('taskValue').value = task.val || '';
+        document.getElementById('taskDeadline').value = task.deadline || '';
+        document.getElementById('taskObs').value = task.obs || '';
+        document.getElementById('btnDeleteTask').style.display = 'block';
+
+        if (task.attachment) {
+          currentAttachmentBase64 = task.attachment;
+          currentAttachmentName = task.attachmentName || 'Anexo';
+          document.getElementById('attachmentPreview').innerHTML = '<a href="' + task.attachment + '" download="' + currentAttachmentName + '" style="color:var(--accent-cyan); text-decoration:underline;">Baixar: ' + escapeHtml(currentAttachmentName) + '</a>';
+        }
+
+        renderComments(task.comments || []);
+        document.getElementById('commentsSection').style.display = 'flex';
       } else {
-        kanban.style.display = 'none';
-        cal.style.display = 'block';
-        bKanban.classList.remove('active');
-        bCal.classList.add('active');
+        document.getElementById('taskId').value = '';
+        document.getElementById('modalTitleText').textContent = 'Nova Demanda (' + defaultStage + ')';
+        document.getElementById('taskTitle').value = '';
+        document.getElementById('taskStage').value = defaultStage;
+        document.getElementById('taskPriority').value = 'media';
+        document.getElementById('taskOwner').value = '';
+        document.getElementById('taskBottleneck').value = '';
+        document.getElementById('taskRef').value = '';
+        document.getElementById('taskValue').value = '';
+        document.getElementById('taskDeadline').value = '';
+        document.getElementById('taskObs').value = '';
+        document.getElementById('btnDeleteTask').style.display = 'none';
+        document.getElementById('commentsSection').style.display = 'none';
+      }
+
+      document.getElementById('taskModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('taskModal').style.display = 'none';
+    }
+
+    function handleFileAttachment(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (file.size > 2 * 1024 * 1024) {
+        alert("O anexo não pode ultrapassar 2MB para preservar o limite da nuvem.");
+        e.target.value = '';
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        currentAttachmentBase64 = evt.target.result;
+        currentAttachmentName = file.name;
+        document.getElementById('attachmentPreview').textContent = 'Anexo pronto: ' + file.name;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function renderComments(comments) {
+      const list = document.getElementById('commentsList');
+      list.innerHTML = '';
+      if (!comments || comments.length === 0) {
+        list.innerHTML = '<span style="font-size:0.7rem; color:var(--text-muted);">Nenhum comentário registado.</span>';
+        return;
+      }
+      comments.forEach(function(c) {
+        const item = document.createElement('div');
+        item.className = 'comment-item';
+        item.innerHTML = '<div>' + escapeHtml(c.text) + '</div><div class="comment-time">' + escapeHtml(c.time) + '</div>';
+        list.appendChild(item);
+      });
+    }
+
+    function addComment() {
+      const text = document.getElementById('newCommentText').value.trim();
+      if (!text) return;
+      const taskId = document.getElementById('taskId').value;
+      const task = tasks.find(function(t) { return String(t.id) === String(taskId); });
+      if (task) {
+        if (!Array.isArray(task.comments)) task.comments = [];
+        task.comments.push({
+          text: text,
+          time: new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
+        });
+        document.getElementById('newCommentText').value = '';
+        renderComments(task.comments);
+        saveToStorage();
+      }
+    }
+
+    function saveTaskModal() {
+      const title = document.getElementById('taskTitle').value.trim();
+      if (!title) {
+        alert("Por favor, preencha o título da demanda.");
+        return;
+      }
+
+      const taskId = document.getElementById('taskId').value;
+      const stage = document.getElementById('taskStage').value;
+      const priority = document.getElementById('taskPriority').value;
+      const owner = document.getElementById('taskOwner').value.trim();
+      const bottleneck = document.getElementById('taskBottleneck').value.trim();
+      const ref = document.getElementById('taskRef').value.trim();
+      const val = document.getElementById('taskValue').value.trim();
+      const deadline = document.getElementById('taskDeadline').value;
+      const obs = document.getElementById('taskObs').value.trim();
+
+      if (taskId) {
+        const task = tasks.find(function(t) { return String(t.id) === String(taskId); });
+        if (task) {
+          task.title = title;
+          task.stage = stage;
+          task.priority = priority;
+          task.owner = owner;
+          task.bottleneck = bottleneck;
+          task.ref = ref;
+          task.val = val;
+          task.deadline = deadline;
+          task.obs = obs;
+          if (currentAttachmentBase64) {
+            task.attachment = currentAttachmentBase64;
+            task.attachmentName = currentAttachmentName;
+          }
+        }
+      } else {
+        const newTask = {
+          id: Date.now(),
+          title: title,
+          stage: stage,
+          priority: priority,
+          owner: owner,
+          bottleneck: bottleneck,
+          ref: ref,
+          val: val,
+          deadline: deadline,
+          obs: obs,
+          attachment: currentAttachmentBase64,
+          attachmentName: currentAttachmentName,
+          comments: []
+        };
+        tasks.push(newTask);
+      }
+
+      saveToStorage();
+      closeModal();
+    }
+
+    function deleteCurrentTask() {
+      const taskId = document.getElementById('taskId').value;
+      if (!taskId) return;
+      if (confirm("Tem certeza que deseja excluir esta demanda?")) {
+        tasks = tasks.filter(function(t) { return String(t.id) !== String(taskId); });
+        saveToStorage();
+        closeModal();
+      }
+    }
+
+    function formatCurrency(input) {
+      let v = input.value.replace(/\D/g, '');
+      v = (v / 100).toFixed(2) + '';
+      v = v.replace(".", ",");
+      v = v.replace(/(\d)(\d{3})(\d{3}),/g, "$1.$2.$3,");
+      v = v.replace(/(\d)(\d{3}),/g, "$1.$2,");
+      input.value = v === '0,00' ? '' : v;
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    /* ALTERNAR TELAS */
+    function switchView(view) {
+      if (view === 'kanban') {
+        document.getElementById('kanbanBoard').style.display = 'flex';
+        document.getElementById('calendarView').style.display = 'none';
+        document.getElementById('btnViewKanban').classList.add('active');
+        document.getElementById('btnViewCalendar').classList.remove('active');
+        renderKanban();
+      } else {
+        document.getElementById('kanbanBoard').style.display = 'none';
+        document.getElementById('calendarView').style.display = 'block';
+        document.getElementById('btnViewKanban').classList.remove('active');
+        document.getElementById('btnViewCalendar').classList.add('active');
         renderCalendar();
       }
     }
 
-    function isOverdue(task) {
-      if (!task.due || task.stage === 'concluido') return false;
-      return new Date() > new Date(task.due);
-    }
-
-    function updateDashboardKPIs() {
-      var totalAberto = 0;
-      var noPrazo = 0;
-      var atrasadas = 0;
-      var totalValorFinanceiro = 0;
-
-      tasks.forEach(function(t) {
-        if (t.stage !== 'concluido') {
-          totalAberto++;
-          if (isOverdue(t)) atrasadas++;
-          else noPrazo++;
-          
-          if (t.stage === 'financeiro' && t.val) {
-            totalValorFinanceiro += Number(t.val) || 0;
-          }
-        }
-      });
-
-      document.getElementById('kpi-aberto').innerText = totalAberto;
-      document.getElementById('kpi-prazo').innerText = noPrazo;
-      document.getElementById('kpi-atrasadas').innerText = atrasadas;
-      document.getElementById('kpi-cte').innerText = totalValorFinanceiro.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    }
-
-    function setQuickFilter(tipo) {
-      var statusSelect = document.getElementById('filtro-status-prazo');
-      var setorSelect = document.getElementById('filtro-setor');
-      var prioSelect = document.getElementById('filtro-prioridade');
-      prioSelect.value = '';
-
-      if (tipo === 'atrasadas') {
-        statusSelect.value = 'atrasado';
-        setorSelect.value = '';
-      } else if (tipo === 'prazo') {
-        statusSelect.value = 'noprazo';
-        setorSelect.value = '';
-      } else if (tipo === 'cte') {
-        statusSelect.value = '';
-        setorSelect.value = 'financeiro';
-      } else {
-        statusSelect.value = '';
-        setorSelect.value = '';
-      }
-      renderKanban();
-    }
-
-    function renderKanban() {
-      var q = (document.getElementById('filtro-busca').value || '').toLowerCase();
-      var st = document.getElementById('filtro-setor').value;
-      var statusPrazo = document.getElementById('filtro-status-prazo').value;
-      var prio = document.getElementById('filtro-prioridade').value;
-
-      ['operacional', 'atendimento', 'comercial', 'financeiro', 'concluido'].forEach(function(col) {
-        var el = document.getElementById('col-' + col);
-        if (el) el.innerHTML = '';
-      });
-
-      var counts = { operacional: 0, atendimento: 0, comercial: 0, financeiro: 0, concluido: 0 };
-
-      tasks.forEach(function(t) {
-        var titleMatch = (t.title || '').toLowerCase().indexOf(q) !== -1;
-        var refMatch = (t.ref || '').toLowerCase().indexOf(q) !== -1;
-        var ownerMatch = (t.owner || '').toLowerCase().indexOf(q) !== -1;
-        var bottleneckMatch = (t.bottleneck || '').toLowerCase().indexOf(q) !== -1;
-        var obsMatch = (t.obs || '').toLowerCase().indexOf(q) !== -1;
-        
-        var commentsMatch = false;
-        if (Array.isArray(t.comments)) {
-          commentsMatch = t.comments.some(function(c) {
-            return (c.text || '').toLowerCase().indexOf(q) !== -1 || (c.author || '').toLowerCase().indexOf(q) !== -1;
-          });
-        }
-
-        var matchQ = titleMatch || refMatch || ownerMatch || bottleneckMatch || obsMatch || commentsMatch;
-        var matchSt = !st || t.stage === st;
-        var matchPrio = !prio || t.priority === prio;
-        
-        var overdue = isOverdue(t);
-        var matchPrazo = true;
-        if (statusPrazo === 'atrasado' && !overdue) matchPrazo = false;
-        if (statusPrazo === 'noprazo' && overdue) matchPrazo = false;
-
-        if (matchQ && matchSt && matchPrazo && matchPrio) {
-          if (counts[t.stage] !== undefined) counts[t.stage]++;
-          var card = document.createElement('div');
-          card.className = 'card ' + (overdue ? 'card-overdue ' : '') + (t.stage === 'financeiro' ? 'card-cte' : '');
-          card.draggable = true;
-          card.ondragstart = function(e) { e.dataTransfer.setData('text/plain', t.id); };
-          
-          // Abrir card ao clicar nele
-          card.onclick = function(e) {
-            if (!e.target.closest('button') && !e.target.closest('a')) {
-              openDetailModal(t.id);
-            }
-          };
-
-          var badgeClass = 'badge-' + t.stage;
-          var badgeStatus = overdue 
-            ? '<span class="badge badge-atrasado">Atrasada</span>' 
-            : (t.due && t.stage !== 'concluido' ? '<span class="badge badge-ontime">No Prazo</span>' : '');
-
-          var prioLabelMap = {
-            critica: 'Crítica',
-            alta: 'Alta',
-            media: 'Média',
-            baixa: 'Baixa',
-            sem: 'Sem urgência'
-          };
-          var prioClass = 'badge-prioridade-' + (t.priority || 'media');
-          var badgePrioridade = '<span class="badge ' + prioClass + '">' + (prioLabelMap[t.priority] || 'Média') + '</span>';
-
-          var dueFmt = t.due 
-            ? new Date(t.due).toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'}) 
-            : 'Sem prazo';
-
-          var valFmt = t.val ? '<div style="color:var(--accent-cyan); font-weight:700; margin-top:2px;">R$ ' + Number(t.val).toLocaleString('pt-BR', {minimumFractionDigits: 2}) + '</div>' : '';
-
-          var donoFmt = t.owner ? '<div>Dono: <strong class="meta-dono">' + t.owner + '</strong></div>' : '';
-          var paradoFmt = t.bottleneck ? '<div>Parado em: <strong class="meta-parado">' + t.bottleneck + '</strong></div>' : '';
-          var obsFmt = t.obs ? '<div class="meta-obs"><strong>Obs:</strong> ' + t.obs + '</div>' : '';
-          var anexoFmt = (t.attachment && t.attachment.data) ? 
-            '<div style="margin-top:5px;"><a href="' + t.attachment.data + '" download="' + (t.attachment.name || 'anexo') + '" class="btn-anexo" target="_blank">📎 ' + (t.attachment.name || 'Anexo') + '</a></div>' : '';
-
-          var commentsCount = (t.comments && t.comments.length) ? 
-            '<div><span class="card-comments-count">💬 ' + t.comments.length + ' histórico(s)</span></div>' : '';
-
-          card.innerHTML = 
-            '<div class="card-top">' +
-              '<div class="badges-group">' +
-                '<span class="badge ' + badgeClass + '">' + t.stage + '</span>' +
-                badgePrioridade +
-              '</div>' +
-              '<span style="font-size:0.7rem; color:' + (overdue ? '#ef4444' : '#64748b') + ';">' + dueFmt + '</span>' +
-            '</div>' +
-            '<div class="card-title">' + t.title + '</div>' +
-            '<div class="card-meta">' +
-              '<div>Ref: <strong>' + (t.ref || 'N/A') + '</strong></div>' +
-              donoFmt +
-              paradoFmt +
-              obsFmt +
-              anexoFmt +
-              commentsCount +
-              valFmt +
-              '<div style="margin-top:6px;">' + badgeStatus + '</div>' +
-            '</div>' +
-            '<div class="card-actions">' +
-              '<button class="btn-action" onclick="advanceTask(\'' + t.id + '\')">Avançar ➔</button>' +
-              '<button class="card-del" onclick="deleteTask(\'' + t.id + '\')">Excluir</button>' +
-            '</div>';
-
-          var targetCol = document.getElementById('col-' + t.stage);
-          if (targetCol) targetCol.appendChild(card);
-        }
-      });
-
-      ['operacional', 'atendimento', 'comercial', 'financeiro', 'concluido'].forEach(function(c) {
-        var el = document.getElementById('count-' + c);
-        if (el) el.innerText = counts[c];
-      });
-
-      updateDashboardKPIs();
-    }
-
-    function advanceTask(id) {
-      var t = tasks.find(function(x) { return x.id === id; });
-      if (!t) return;
-      if (t.stage === 'operacional') t.stage = 'atendimento';
-      else if (t.stage === 'atendimento') t.stage = 'comercial';
-      else if (t.stage === 'comercial') t.stage = 'financeiro';
-      else if (t.stage === 'financeiro') t.stage = 'concluido';
-      saveToStorage();
-      renderKanban();
-    }
-
-    function deleteTask(id) {
-      if (!confirm('Deseja realmente excluir esta demanda?')) return;
-      tasks = tasks.filter(function(x) { return x.id !== id; });
-      saveToStorage();
-      renderKanban();
-      closeDetailModal();
-    }
-
-    function allowDrop(e) { e.preventDefault(); }
-    function drop(e, stage) {
-      e.preventDefault();
-      var id = e.dataTransfer.getData('text/plain');
-      var t = tasks.find(function(x) { return x.id === id; });
-      if (t) {
-        t.stage = stage;
-        saveToStorage();
-        renderKanban();
-      }
-    }
-
-    /* CONTROLE DA JANELA DO CARD COMPLETO */
-    function openDetailModal(id) {
-      var t = tasks.find(function(x) { return x.id === id; });
-      if (!t) return;
-
-      document.getElementById('detail-task-id').value = t.id;
-      document.getElementById('detail-card-title').innerText = t.title || 'Detalhes da Demanda';
-      document.getElementById('detail-title-input').value = t.title || '';
-      document.getElementById('detail-stage-input').value = t.stage || 'operacional';
-      document.getElementById('detail-priority-input').value = t.priority || 'media';
-      document.getElementById('detail-owner-input').value = t.owner || '';
-      document.getElementById('detail-ref-input').value = t.ref || '';
-      document.getElementById('detail-bottleneck-input').value = t.bottleneck || '';
-      document.getElementById('detail-val-input').value = t.val || '';
-      document.getElementById('detail-due-input').value = t.due || '';
-      document.getElementById('detail-obs-input').value = t.obs || '';
-
-      renderDetailAttachment(t);
-      renderDetailComments(t);
-
-      document.getElementById('modal-detail').style.display = 'flex';
-    }
-
-    function closeDetailModal() {
-      document.getElementById('modal-detail').style.display = 'none';
-      document.getElementById('detail-task-id').value = '';
-      renderKanban();
-    }
-
-    function renderDetailAttachment(t) {
-      var wrapper = document.getElementById('detail-attachment-wrapper');
-      if (t.attachment && t.attachment.data) {
-        wrapper.innerHTML = '<a href="' + t.attachment.data + '" download="' + (t.attachment.name || 'anexo') + '" class="btn-anexo" target="_blank">📎 Baixar ' + (t.attachment.name || 'Anexo') + '</a> ' +
-          '<button class="card-del" style="margin-left:8px;" onclick="removeAttachmentFromCard()">Remover Anexo</button>';
-      } else {
-        wrapper.innerHTML = '<span style="font-size:0.75rem; color:#64748b;">Nenhum arquivo anexado.</span>';
-      }
-    }
-
-    function removeAttachmentFromCard() {
-      var id = document.getElementById('detail-task-id').value;
-      var t = tasks.find(function(x) { return x.id === id; });
-      if (!t) return;
-      t.attachment = null;
-      saveToStorage();
-      renderDetailAttachment(t);
-    }
-
-    document.getElementById('detail-file-input').addEventListener('change', function(e) {
-      var file = e.target.files[0];
-      if (!file) return;
-      if (file.size > 2.5 * 1024 * 1024) {
-        alert('Recomendamos arquivos de até 2.5MB para melhor desempenho.');
-      }
-      var reader = new FileReader();
-      reader.onload = function(evt) {
-        var id = document.getElementById('detail-task-id').value;
-        var t = tasks.find(function(x) { return x.id === id; });
-        if (t) {
-          t.attachment = { name: file.name, data: evt.target.result };
-          saveToStorage();
-          renderDetailAttachment(t);
-        }
-      };
-      reader.readAsDataURL(file);
-    });
-
-    function autoSaveCurrentTask() {
-      var id = document.getElementById('detail-task-id').value;
-      var t = tasks.find(function(x) { return x.id === id; });
-      if (!t) return;
-
-      t.title = document.getElementById('detail-title-input').value.trim() || 'Sem título';
-      t.stage = document.getElementById('detail-stage-input').value;
-      t.priority = document.getElementById('detail-priority-input').value;
-      t.owner = document.getElementById('detail-owner-input').value.trim();
-      t.ref = document.getElementById('detail-ref-input').value.trim();
-      t.bottleneck = document.getElementById('detail-bottleneck-input').value.trim();
-      var val = document.getElementById('detail-val-input').value;
-      t.val = val ? parseFloat(val) : null;
-      t.due = document.getElementById('detail-due-input').value;
-      t.obs = document.getElementById('detail-obs-input').value.trim();
-
-      document.getElementById('detail-card-title').innerText = t.title;
-      saveToStorage();
-    }
-
-    function renderDetailComments(t) {
-      var list = document.getElementById('detail-comments-list');
-      list.innerHTML = '';
-      var comments = Array.isArray(t.comments) ? t.comments : [];
-      document.getElementById('detail-comments-badge').innerText = comments.length + ' mensagens';
-
-      if (comments.length === 0) {
-        list.innerHTML = '<div style="font-size:0.75rem; color:#64748b; text-align:center; padding:20px;">Nenhum comentário registrado ainda. Envie a primeira mensagem abaixo.</div>';
-        return;
-      }
-
-      comments.forEach(function(c) {
-        var bubble = document.createElement('div');
-        bubble.className = 'comment-bubble';
-        bubble.innerHTML = 
-          '<div class="comment-top">' +
-            '<span class="comment-author">' + (c.author || 'Usuário') + '</span>' +
-            '<span class="comment-time">' + (c.date || '') + '</span>' +
-          '</div>' +
-          '<div class="comment-text">' + c.text + '</div>';
-        list.appendChild(bubble);
-      });
-
-      list.scrollTop = list.scrollHeight;
-    }
-
-    function addCommentToCard() {
-      var id = document.getElementById('detail-task-id').value;
-      var t = tasks.find(function(x) { return x.id === id; });
-      if (!t) return;
-
-      var text = document.getElementById('new-comment-text').value.trim();
-      var author = document.getElementById('comment-author-input').value.trim() || 'Eduardo Chiles';
-
-      if (!text) return alert('Digite um comentário antes de enviar.');
-
-      var now = new Date();
-      var dateStr = now.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'}) + ' ' + 
-                    now.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
-
-      if (!Array.isArray(t.comments)) t.comments = [];
-      t.comments.push({
-        author: author,
-        text: text,
-        date: dateStr
-      });
-
-      saveToStorage();
-      document.getElementById('new-comment-text').value = '';
-      renderDetailComments(t);
-    }
-
-    function createNewTask() {
-      var newTask = {
-        id: 'task_' + Date.now(),
-        title: 'Nova Demanda ' + new Date().toLocaleDateString('pt-BR'),
-        owner: 'Eduardo Chiles',
-        bottleneck: '',
-        priority: 'media',
-        ref: '',
-        val: null,
-        stage: 'operacional',
-        due: '',
-        obs: '',
-        comments: []
-      };
-      tasks.push(newTask);
-      saveToStorage();
-      renderKanban();
-      openDetailModal(newTask.id);
-    }
-
-    function openAnjunModal() { document.getElementById('modal-anjun').style.display = 'flex'; }
-    function closeAnjunModal() { document.getElementById('modal-anjun').style.display = 'none'; }
-
-    function openPasteModal() { document.getElementById('modal-paste').style.display = 'flex'; }
-    function closePasteModal() { document.getElementById('modal-paste').style.display = 'none'; }
-
-    function saveManualAnjun() {
-      var filial = document.getElementById('anjun-filial-input').value.trim() || 'Anjun Geral';
-      var quinzena = document.getElementById('anjun-quinzena-input').value.trim() || 'Quinzena Vigente';
-      var valor = document.getElementById('anjun-valor-input').value;
-
-      tasks.push({
-        id: 'anjun_' + Date.now(),
-        title: 'Emissão CT-e: ' + filial + ' (' + quinzena + ')',
-        owner: 'Eduardo Chiles',
-        bottleneck: 'Aguardando retorno financeiro para emissão do CTE',
-        priority: 'alta',
-        ref: filial + ' - ' + quinzena,
-        val: valor ? parseFloat(valor) : null,
-        stage: 'financeiro',
-        due: null,
-        obs: '',
-        comments: []
-      });
-
-      saveToStorage();
-      closeAnjunModal();
-      document.getElementById('anjun-filial-input').value = '';
-      document.getElementById('anjun-quinzena-input').value = '';
-      document.getElementById('anjun-valor-input').value = '';
-      renderKanban();
-    }
-
-    function processPastedData() {
-      var raw = document.getElementById('paste-input').value.trim();
-      if (!raw) return alert('Cole as linhas da folha antes de continuar.');
-
-      var lines = raw.split('\n');
-      var count = 0;
-
-      lines.forEach(function(line, idx) {
-        var cols = line.split('\t').map(function(c) { return c.trim(); });
-        if (cols.length >= 2) {
-          var filial = cols[0];
-          var quinzena = cols[1];
-          var valorLimpo = null;
-          
-          if (cols[2]) {
-            var str = cols[2].replace('R$', '').replace(/\./g, '').replace(',', '.').trim();
-            valorLimpo = parseFloat(str);
-          }
-
-          tasks.push({
-            id: 'pasted_' + Date.now() + '_' + idx,
-            title: 'Emissão CT-e: ' + filial + ' (' + quinzena + ')',
-            owner: 'Faturamento Anjun',
-            bottleneck: 'Aguardando retorno financeiro',
-            priority: 'alta',
-            ref: filial + ' - ' + quinzena,
-            val: isNaN(valorLimpo) ? null : valorLimpo,
-            stage: 'financeiro',
-            due: null,
-            obs: '',
-            comments: []
-          });
-          count++;
-        }
-      });
-
-      saveToStorage();
-      closePasteModal();
-      document.getElementById('paste-input').value = '';
-      renderKanban();
-      alert(count + ' linhas importadas com sucesso para a coluna Financeiro!');
-    }
-
-    function checkAlarms() {
-      var now = new Date();
-      tasks.forEach(function(t) {
-        if (t.due && t.stage !== 'concluido' && !notifiedTasks.has(t.id)) {
-          if (now >= new Date(t.due)) {
-            notifiedTasks.add(t.id);
-            var banner = document.getElementById('alarm-banner');
-            document.getElementById('alarm-text').innerText = 'Prazo Vencido: ' + t.title;
-            banner.style.display = 'block';
-          }
-        }
-      });
-    }
-
-    function dismissAlarm() {
-      document.getElementById('alarm-banner').style.display = 'none';
-    }
-
+    /* CALENDÁRIO */
     function renderCalendar() {
-      var grid = document.getElementById('calendar-grid');
+      const grid = document.getElementById('calendarDaysGrid');
       grid.innerHTML = '';
-      var days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-      days.forEach(function(d) {
-        var el = document.createElement('div');
-        el.style.textAlign = 'center';
-        el.style.fontSize = '0.75rem';
-        el.style.fontWeight = '700';
-        el.style.color = 'var(--text-muted)';
-        el.style.padding = '8px 0';
-        el.innerText = d;
-        grid.appendChild(el);
-      });
+      const year = currentCalDate.getFullYear();
+      const month = currentCalDate.getMonth();
 
-      var now = new Date();
-      var year = now.getFullYear();
-      var month = now.getMonth();
-      document.getElementById('calendar-month-title').innerText = now.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' }).toUpperCase();
-
-      var firstDay = new Date(year, month, 1).getDay();
-      var totalDays = new Date(year, month + 1, 0).getDate();
-
-      for (var i = 0; i < firstDay; i++) {
-        grid.appendChild(document.createElement('div'));
-      }
-
-      for (var day = 1; day <= totalDays; day++) {
-        var cell = document.createElement('div');
-        cell.style.background = 'var(--bg-card)';
-        cell.style.border = '1px solid var(--border)';
-        cell.style.minHeight = '90px';
-        cell.style.padding = '6px';
-        cell.style.borderRadius = '4px';
-        cell.style.fontSize = '0.75rem';
-        
-        var isToday = day === now.getDate();
-        cell.innerHTML = '<div style="font-weight:700; color:' + (isToday ? 'var(--accent-amber)' : '#64748b') + '; margin-bottom:4px;">' + day + '</div>';
-
-        var dayStr = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
-        tasks.filter(function(t) { return t.due && t.due.indexOf(dayStr) === 0; }).forEach(function(t) {
-          var item = document.createElement('div');
-          item.style.background = '#1e293b';
-          item.style.borderLeft = '2px solid var(--accent-cyan)';
-          item.style.padding = '2px 4px';
-          item.style.marginBottom = '3px';
-          item.style.borderRadius = '2px';
-          item.style.fontSize = '0.7rem';
-          item.style.whiteSpace = 'nowrap';
-          item.style.overflow = 'hidden';
-          item.style.textOverflow = 'ellipsis';
-          item.innerText = t.title;
-          cell.appendChild(item);
-        });
-
-        grid.appendChild(cell);
-      }
-    }
-
-    function exportData() {
-      var blob = new Blob([JSON.stringify(tasks, null, 2)], { type: 'application/json' });
-      var a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'backup_operacional_' + new Date().toISOString().slice(0,10) + '.json';
-      a.click();
-    }
-
-    function importData(event) {
-      var file = event.target.files[0];
-      if (!file) return;
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        try {
-          tasks = JSON.parse(e.target.result);
-          if (!Array.isArray(tasks)) tasks = [];
-          saveToStorage();
-          renderKanban();
-          alert('Dados carregados com sucesso!');
-        } catch (err) {
-          alert('Ficheiro inválido.');
-        }
-      };
-      reader.readAsText(file);
-    }
-
-    setInterval(checkAlarms, 10000);
-    renderKanban();
-  </script>
-</body>
-</html>
+      const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "
